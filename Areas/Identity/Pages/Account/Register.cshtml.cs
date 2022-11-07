@@ -10,9 +10,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using Blog_MVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Blog_MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -101,12 +101,12 @@ namespace Blog_MVC.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "First Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
             public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
             public string LastName { get; set; }
         }
 
@@ -169,7 +169,10 @@ namespace Blog_MVC.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<BlogUser>();
+                BlogUser blogUser = Activator.CreateInstance<BlogUser>();
+                blogUser.FirstName = Input.FirstName;
+                blogUser.LastName = Input.LastName;
+                return blogUser;
             }
             catch
             {

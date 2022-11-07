@@ -1,0 +1,119 @@
+﻿@model Blog_MVC.Models.BlogPost
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>@Html.DisplayFor(model=>model.Title)</h4>
+    <hr />
+    <dl class="row">
+        @*<dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastUpdated)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastUpdated)
+        </dd>
+@*        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Slug)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Slug)
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Abstract)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Abstract)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsDeleted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsDeleted)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsPublished)
+        </dd>
+@*        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageData)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ImageData)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ImageType)
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+    </dl>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Comments" method="post">
+            @* asp-for tells the form what value to look for (where Id is 'Id' in BlogPost class),
+            name then tells it what to call it in when Posting -> Id turns into BlogPostId so it can be used by CommentsController *@
+            <input type="hidden" asp-for="Id" name="BlogPostId" />
+            <div class="form-group">
+                <label class="control-label">Add a Comment</label>
+                <textarea name="Body" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary my-3" />
+            </div>
+        </form>
+    </div>
+</div>
+
+    <table class="table table-secondary table-striped table-hover shadow-lg">
+        <thead>
+            <tr>
+                <th>
+                    COMMENTS
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Comment comment in Model.Comments)
+            {
+                <tr class="d-flex">
+                    <td class="col-10">@comment.Body</td>
+                    <td class=" col-2 justify-content-end">@comment.DateCreated.ToLocalTime()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index" asp-controller="BlogPosts">Back to List</a>
+</div>
