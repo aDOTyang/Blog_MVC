@@ -15,12 +15,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<BlogUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddDefaultUI().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // custom services
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddMvc();
 
 var app = builder.Build();
@@ -49,6 +50,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "custom",
+    pattern: "Content/{slug}",
+    defaults: new { controller = "BlogPosts", action = "Details" });
 
 app.MapControllerRoute(
     name: "default",

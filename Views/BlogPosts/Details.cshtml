@@ -77,25 +77,26 @@
     </dl>
 </div>
 
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" asp-controller="Comments" method="post">
-            @* asp-for tells the form what value to look for (where Id is 'Id' in BlogPost class),
+@if (User.Identity!.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" asp-controller="Comments" method="post">
+                @* asp-for tells the form what value to look for (where Id is 'Id' in BlogPost class),
             name then tells it what to call it in when Posting -> Id turns into BlogPostId so it can be used by CommentsController *@
-            <input type="hidden" asp-for="Id" name="BlogPostId" />
-            <div class="form-group">
-                <label class="control-label">Add a Comment</label>
-                <textarea name="Body" rows="5" class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary my-3" />
-            </div>
-        </form>
+                <input type="hidden" asp-for="Id" name="BlogPostId" />
+                <div class="form-group">
+                    <label class="control-label">Add a Comment</label>
+                    <textarea name="Body" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary my-3" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-    <table class="table table-secondary table-striped table-hover shadow-lg">
+}
+<table class="table table-secondary table-striped table-hover shadow-lg">
         <thead>
             <tr>
                 <th>
@@ -115,6 +116,10 @@
     </table>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+@if (User.IsInRole("Administrator"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> <span>|</span>
+    }
+    
     <a asp-action="Index" asp-controller="BlogPosts">Back to List</a>
 </div>
