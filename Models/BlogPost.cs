@@ -16,10 +16,10 @@ namespace Blog_MVC.Models
         [Required]
         public string? Content { get; set; }
 
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; }
 
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         public DateTime? LastUpdated { get; set; }
 
         // Foreign Key (PK for Category)

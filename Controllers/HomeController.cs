@@ -1,5 +1,7 @@
-﻿using Blog_MVC.Models;
+﻿using Blog_MVC.Data;
+using Blog_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Blog_MVC.Controllers
@@ -7,15 +9,19 @@ namespace Blog_MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<BlogPost> model = await _context.BlogPosts.Include(b=>b.Comments)
+                                   .Include(b=>b.Category).OrderByDescending(b=>b.DateCreated).ToListAsync();
+            return View(model);
         }
 
         public IActionResult Privacy()

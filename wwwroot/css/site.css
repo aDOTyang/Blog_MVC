@@ -16,3 +16,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*change dark mode table colors*/
+.active-dark-mode table{
+    color: white;
+}
