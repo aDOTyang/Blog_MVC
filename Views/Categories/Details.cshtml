@@ -1,4 +1,7 @@
 ﻿@model Blog_MVC.Models.Category
+@using Blog_MVC.Enums
+@using Blog_MVC.Services.Interfaces
+@inject IImageService _ImageService
 
 @{
     ViewData["Title"] = "Details";
@@ -25,12 +28,9 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageData)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
+        <dd>
+            <img src="@_ImageService.ConvertByteArrayToFile(Model.ImageData!,Model.ImageType!, (int)DefaultImage.BlogPostImage)" class="img-fluid">
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageType)
-        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ImageType)
         </dd>

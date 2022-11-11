@@ -10,6 +10,9 @@ namespace Blog_MVC.Models
         public int Id { get; set; }
 
         [Required]
+        public string? CreatorId { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
         public string? Title { get; set; }
 
@@ -43,5 +46,7 @@ namespace Blog_MVC.Models
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+
+        public virtual BlogUser? Creator { get; set; }
     }
 }

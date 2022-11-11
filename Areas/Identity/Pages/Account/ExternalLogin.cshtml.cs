@@ -85,6 +85,16 @@ namespace Blog_MVC.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            public string LastName { get; set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -202,13 +212,16 @@ namespace Blog_MVC.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<BlogUser>();
+                BlogUser blogUser = Activator.CreateInstance<BlogUser>();
+                blogUser.FirstName = Input.FirstName;
+                blogUser.LastName = Input.LastName;
+                return blogUser;
             }
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(BlogUser)}'. " +
                     $"Ensure that '{nameof(BlogUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 

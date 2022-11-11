@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Blog_MVC.Data;
 using Blog_MVC.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Blog_MVC.Controllers
 {
+    [Authorize(Roles = "Administrator, Moderator")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,6 +26,7 @@ namespace Blog_MVC.Controllers
         }
 
         // GET: Comments
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -30,6 +34,7 @@ namespace Blog_MVC.Controllers
         }
 
         // GET: Comments/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Comments == null)
@@ -62,7 +67,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment, string? slug)
         {
             // temp test - remove later
             ModelState.Remove("AuthorId");
@@ -74,7 +79,7 @@ namespace Blog_MVC.Controllers
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details","BlogPosts",new {id=comment.BlogPostId});
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
             ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
             ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
@@ -170,14 +175,14 @@ namespace Blog_MVC.Controllers
             {
                 _context.Comments.Remove(comment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentExists(int id)
         {
-          return _context.Comments.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }

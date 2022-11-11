@@ -11,28 +11,41 @@ using Blog_MVC.Services.Interfaces;
 using Blog_MVC.Services;
 using Microsoft.AspNetCore.Authorization;
 using Blog_MVC.Extensions;
+using Microsoft.AspNetCore.Identity;
+using X.PagedList;
 
 namespace Blog_MVC.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class BlogPostsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
         private readonly IBlogPostService _blogPostService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public BlogPostsController(ApplicationDbContext context, IImageService imageService, IBlogPostService blogPostService)
+        public BlogPostsController(ApplicationDbContext context, IImageService imageService, IBlogPostService blogPostService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _imageService = imageService;
             _blogPostService = blogPostService;
+            _userManager = userManager;
         }
 
         // GET: BlogPosts
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? blogPostId)
         {
-            var applicationDbContext = _context.BlogPosts.Include(b => b.Category);
+            List<BlogPost> blogPosts = new List<BlogPost>();
+            //List<Tag> blogPostTags = await _context.Tags.ToListAsync();
+
+            //if ()
+            //{
+            //    blogPostTags = await _context.Tags.Include(b => b.BlogPosts).ToListAsync();
+            //    return blogPostTags;
+            //}
+
+            var applicationDbContext = _context.BlogPosts.Include(b => b.Category).Include(t => t.Tags);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -46,9 +59,9 @@ namespace Blog_MVC.Controllers
             }
 
             var blogPost = await _context.BlogPosts
-                .Include(b => b.Category).Include(c=>c.Comments).ThenInclude(c=>c.Author)
+                .Include(b => b.Category).Include(c => c.Comments).ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
-            
+
             if (blogPost == null)
             {
                 return NotFound();
@@ -59,10 +72,11 @@ namespace Blog_MVC.Controllers
 
         // default blog image from <a href="https://storyset.com/internet">Internet illustrations by Storyset</a>
         // GET: BlogPosts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            return View();
+            ViewData["BlogPostTags"] = new MultiSelectList(await _blogPostService.GetTagsAsync(), "Id", "Name");
+            return View(new BlogPost());
         }
 
         // POST: BlogPosts/Create
@@ -70,15 +84,19 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> SelectedTags)
         {
+
+            ModelState.Remove("CreatorId");
+
             if (ModelState.IsValid)
             {
+                blogPost.CreatorId = _userManager.GetUserId(User);
 
                 // get slug
                 if (!await _blogPostService.ValidateSlugAsync(blogPost.Title!, blogPost.Id))
                 {
-                    ModelState.AddModelError("Title","This title already exists!");
+                    ModelState.AddModelError("Title", "This title already exists!");
                     ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
                     return View(blogPost);
                 }
@@ -94,26 +112,35 @@ namespace Blog_MVC.Controllers
 
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
+
+                // add list of selected tags
+                await _blogPostService.AddTagsToBlogPostAsync(SelectedTags, blogPost.Id);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
+            ViewData["BlogPostTags"] = new MultiSelectList(await _blogPostService.GetTagsAsync(), "Id", "Name");
             return View(blogPost);
         }
 
         // GET: BlogPosts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.BlogPosts == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+            var blogPost = await _context.BlogPosts.Include(t => t.Tags).FirstOrDefaultAsync(b => b.Id == id);
+
             if (blogPost == null)
             {
                 return NotFound();
             }
+
+            // select allows us to focus on just one attribute of the Tags list
+            IEnumerable<int> blogPostTags = blogPost.Tags.Select(t => t.Id);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
+            ViewData["BlogPostTags"] = new MultiSelectList(await _blogPostService.GetTagsAsync(), "Id", "Name", blogPostTags);
             return View(blogPost);
         }
 
@@ -122,7 +149,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> selectedTags)
         {
             if (id != blogPost.Id)
             {
@@ -152,6 +179,10 @@ namespace Blog_MVC.Controllers
 
                     _context.Update(blogPost);
                     await _context.SaveChangesAsync();
+
+                    await _blogPostService.RemoveAllTagsAsync(blogPost.Id);
+                    await _blogPostService.AddTagsToBlogPostAsync(selectedTags, blogPost.Id);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -201,16 +232,18 @@ namespace Blog_MVC.Controllers
             var blogPost = await _context.BlogPosts.FindAsync(id);
             if (blogPost != null)
             {
-                _context.BlogPosts.Remove(blogPost);
+                // revised to soft delete so posts can be retrieved
+                blogPost.IsDeleted = true;
+                //_context.BlogPosts.Remove(blogPost);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BlogPostExists(int id)
         {
-          return _context.BlogPosts.Any(e => e.Id == id);
+            return _context.BlogPosts.Any(e => e.Id == id);
         }
     }
 }

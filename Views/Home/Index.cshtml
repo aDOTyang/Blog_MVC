@@ -1,15 +1,16 @@
-﻿@using Blog_MVC.Enums
+﻿@model IPagedList<Blog_MVC.Models.BlogPost>
+@using Blog_MVC.Enums
 @using Blog_MVC.Services.Interfaces
-@model IEnumerable<Blog_MVC.Models.BlogPost>
-@inject IImageService ImageService
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@inject IImageService _ImageService
 
-@{
-    ViewData["Title"] = "Home Page";
-}
+<link rel="stylesheet" href="~/css/site.css" />
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4">Hi there, and welcome!</h1>
+    <p>ADOT: A Development Blog</p>
+    <p class="b2">Site created and Blog posts written by Alex Yang &copy; 2022</p>
 </div>
 
 <!-- Start Author Area  -->
@@ -21,21 +22,24 @@
                     <div class="media">
                         <div class="thumbnail">
                             <a href="#">
-                                <img src="~/assets/images/post-images/author/author-b1.png" alt="Author Images">
+                                <img src="~/img/profpic_200.png" alt="Blog Author Image">
                             </a>
                         </div>
                         <div class="media-body">
                             <div class="author-info">
-                                <h1 class="title"><a href="#">Alex Yang</a></h1>
+                                <h1 class="title"><a href="#">@Model.FirstOrDefault()?.Creator?.FullName</a></h1>
                                 <span class="b3 subtitle">Fullstack Web Developer</span>
                             </div>
                             <div class="content">
-                                <p class="b1 description">At 2000 years old, my favorite compliment is being told that I look like my mom. Seeing myself in her image, like this daughter up top, makes me so proud of how far I’ve come, and so thankful for where I come from</p>
+                                <p class="b2">About Me:</p>
+                                <span class="b1 description">I'm creating awesome websites with powerful & flexible functionalities 
+                                    and beautiful front ends! I used C# in ASP.Net 6.0 plus Bootstrap & Javascript to make this blog! 
+                                    Check out my portfolio to see what else I've made and what I'm able to bring to your team!</span>
                                 <ul class="social-share-transparent size-md">
                                     <li><a href="https://www.github.com/aDOTyang"><i class="fab fa-github"></i></a></li>
                                     <li><a href="https://www.linkedin.com/in/alexyanglinked"><i class="fab fa-linkedin"></i></a></li>
                                     <li><a href="mailto:ayangdevv@gmail.com"><i class="far fa-envelope"></i></a></li>
-                                    <li><a href="https://www.linkedin.com/in/alexyanglinked"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="https://alexyang.netlify.app/"><i class="bi bi-journal-album"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -46,6 +50,7 @@
     </div>
 </div>
 <!-- End Author Area  -->
+
 <!-- Start Post List Wrapper  -->
 <div class="axil-post-list-area axil-section-gap bg-color-white">
     <div class="container">
@@ -62,7 +67,7 @@
                     <div class="content-block post-list-view mt--30">
                     <div class="post-thumbnail">
                         <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
-                            <img src="@ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
+                            <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                         </a>
                     </div>
                     <div class="post-content">
@@ -86,7 +91,7 @@
                                     <h6 class="post-author-name">
                                         <span class="hover-flip-item-wrapper">
                                             <span class="hover-flip-item">
-                                                <span data-text="Alex Yang">Alex Yang</span>
+                                                    <span data-text="@post.Creator?.FullName">@post.Creator?.FullName</span>
                                             </span>
                                         </span>
                                     </h6>
@@ -101,6 +106,11 @@
                 </div>
                     <!-- End Post List  -->
                 }
+
+            <div class="b2">Page @(Model.PageCount < Model.PageNumber ? 1 : Model.PageNumber) of @Model.PageCount</div>
+            
+            @* uses similar method to slug in order to maintain page lengths and redirect to new pages *@
+            <div class="b2">@Html.PagedListPager(Model, pageNum => Url.Action("Index",new {pageNum}))</div>
             </div>
             <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
             <partial name="_Sidebar" />
@@ -109,58 +119,3 @@
     </div>
 </div>
 <!-- End Post List Wrapper  -->
-<!-- Start Instagram Area  -->
-<div class="axil-instagram-area axil-section-gap bg-color-grey">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title">
-                    <h2 class="title">Instagram</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row mt--30">
-            <div class="col-lg-12">
-                <ul class="instagram-post-list">
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-01.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-02.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-03.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-04.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-05.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                    <li class="single-post">
-                        <a href="#">
-                            <img src="~/assets/images/small-images/instagram-md-06.jpg" alt="Instagram Images">
-                            <span class="instagram-button"><i class="fab fa-instagram"></i></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Instagram Area  -->

@@ -8,27 +8,34 @@ using Microsoft.EntityFrameworkCore;
 using Blog_MVC.Data;
 using Blog_MVC.Models;
 using Blog_MVC.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Blog_MVC.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
+        private readonly IBlogPostService _blogPostService;
 
-        public CategoriesController(ApplicationDbContext context, IImageService imageService)
+        public CategoriesController(ApplicationDbContext context, IImageService imageService, IBlogPostService blogPostService)
         {
             _context = context;
             _imageService = imageService;
+            _blogPostService = blogPostService;
         }
 
         // GET: Categories
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
               return View(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Categories == null)

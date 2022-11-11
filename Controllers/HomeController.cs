@@ -4,6 +4,7 @@ using Blog_MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace Blog_MVC.Controllers
 {
@@ -20,11 +21,28 @@ namespace Blog_MVC.Controllers
             _blogPostService = blogPostService;
         }
 
-        public async Task<IActionResult> Index()
+        // GET & POST: Pagination
+        public async Task<IActionResult> Index(int? pageNum)
         {
-            List<BlogPost> model = (await _blogPostService.GetAllBlogPostsAsync()).Where(b=>b.IsDeleted == false && b.IsPublished == true).ToList();
+            int pageSize = 5;
+            // if null, sets page = 1
+            int page = pageNum ?? 1;
+            
+            IPagedList<BlogPost> model = (await _blogPostService.GetAllBlogPostsAsync()).Where(b=>b.IsDeleted == false && b.IsPublished == true).ToPagedList(page, pageSize);
 
             return View(model);
+        }
+
+        // GET & POST: custom search function
+        public async Task<IActionResult> SearchIndex(string searchString, int? pageNum)
+        {
+            int pageSize = 5;
+            int page = pageNum ?? 1;
+
+            ViewData["SearchString"] = searchString;
+            IPagedList<BlogPost> model = _blogPostService.SearchBlogPosts(searchString).ToPagedList(page, pageSize);
+
+            return View(nameof(Index), model);
         }
 
         public IActionResult Privacy()

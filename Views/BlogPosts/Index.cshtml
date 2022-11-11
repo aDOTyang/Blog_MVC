@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Blog_MVC.Models.BlogPost>
 @using Blog_MVC.Enums
 @using Blog_MVC.Services.Interfaces
-@inject IImageService ImageService
+@inject IImageService _ImageService
 
 @{
     ViewData["Title"] = "Index";
@@ -71,10 +71,10 @@
                     @Html.DisplayFor(modelItem => item.IsPublished)
                 </td>
                 <td>
-                    <img src="@ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!, (int)DefaultImage.BlogPostImage)" class="img-fluid">
+                    <img src="@_ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!, (int)DefaultImage.BlogPostImage)" class="img-fluid">
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
+                    @Html.DisplayFor(modelItem => item.Category!.Name)
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-slug="@item.Slug">Details</a>
