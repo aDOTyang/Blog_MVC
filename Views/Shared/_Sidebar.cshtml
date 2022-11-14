@@ -10,28 +10,9 @@
 
 <!-- Start Sidebar Area  -->
 <div class="sidebar-inner">
-    <!-- Start Categories Widget  -->
-    <div class="axil-single-widget widget widget_categories mb--30">
-        <ul>
-            @foreach (Category category in (await _BlogPostService.GetCategoriesAsync()).Take(4))
-            {
-                <li class="cat-item">
-                    <a href="#" class="inner">
-                        <div class="thumbnail">
-                            <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!,category.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Category Image">
-                        </div>
-                        <div class="content">
-                            <h5 class="title">@category.Name</h5>
-                        </div>
-                    </a>
-                </li>
-            }
-        </ul>
-    </div>
-    <!-- End Categories Widget  -->
 
     <!-- Start Search Widget  -->
-    <div class="axil-single-widget widget widget_search mb--30">
+    <div class="axil-single-widget widget widget_search mb--30 border border-warning rounded-3">
         <h5 class="widget-title">Search</h5>
         <form asp-action="SearchIndex" asp-controller="Home">
             <div class="axil-search form-group">
@@ -41,9 +22,28 @@
         </form>
     </div>
     <!-- End Search Widget  -->
-
+    <!-- Start Categories Widget  -->
+    <div class="axil-single-widget widget widget_categories mb--30 border border-warning rounded-3">
+        <h5 class="widget-title mt-5">Categories</h5>
+        <ul>
+            @foreach (Category category in (await _BlogPostService.GetCategoriesAsync()).Take(4))
+            {
+                <li class="cat-item">
+                    <a class="inner" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
+                        <div class="thumbnail">
+                            <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!,category.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Category Image">
+                        </div>
+                        <div class="content text-break">
+                            <h5 class="title">@category.Name</h5>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- End Categories Widget  -->
     <!-- Start Popular Posts  -->
-    <div class="axil-single-widget widget widget_postlist mb--30">
+    <div class="axil-single-widget widget widget_postlist mb--30 border border-warning rounded-3">
         <h5 class="widget-title">Popular Posts</h5>
         <!-- Start Post List  -->
         <div class="post-medium-block">
@@ -77,9 +77,8 @@
 
     </div>
     <!-- End Popular Posts  -->
-
     <!-- Start Social Icon Links  -->
-    <div class="axil-single-widget widget widget_social mb--30">
+    <div class="axil-single-widget widget widget_social mb--30 border border-warning rounded-3">
         <h5 class="widget-title">Check out my other work!</h5>
         <!-- Start Post List  -->
         <ul class="social-icon md-size justify-content-center">
@@ -90,6 +89,6 @@
         <!-- End Post List  -->
     </div>
     <!-- End Social Icon Links -->
-  
+
 </div>
 <!-- End Sidebar Area  -->

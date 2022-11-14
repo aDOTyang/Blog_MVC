@@ -124,17 +124,19 @@
         <div class="axil-footer-area axil-footer-style-1 bg-color-white">
             <!-- Start Copyright Area  -->
             <div class="copyright-area">
-                <div class="container">
-                    <div class="row align-items-end">
-                        <div class="col-md-4 col-12 text-start order-1 order-md-first">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-12 text-center text-md-start order-first mb-3 mb-md-0">
                             <span class="b2">Site built by Alex Yang</span>
                         </div>
-                        <div class="inner col-md-4 col-12 text-center flex-wrap order-0 order-md-0">
-                            <img class="light-logo footerLogo" src="~/img/AYdark_250x100.png" alt="Alex Yang Logo white lettering black background" />
-                            <img class="dark-logo footerLogo" src="~/img/AYlight_100x50.png" alt="Alex Yang Logo black lettering on white background" />
+                        <div class="inner col-md-4 col-12 text-center flex-wrap order-0 order-md-0 logo">
+                            <picture>
+                                <source srcset="~/img/AYdark_250x100.png" class="footerLogo" media="(prefers-color-scheme: light)" alt="Alex Yang Logo white lettering black background" />
+                                <img src="~/img/AYlight_100x50.png" class="footerLogo" alt="Alex Yang Logo black lettering on white background" />
+                            </picture>
                         </div>
                         <div class="col-md-4 col-12">
-                            <div class="copyright-right text-end order-md-last order-2">
+                            <div class="copyright-right text-center text-md-end order-md-last order-2 mt-3 mt-md-0">
                                 <span class="b2">All Rights Reserved © 2022</span>
                             </div>
                         </div>
@@ -143,7 +145,7 @@
                 </div>
                 <!-- End Footer Area  -->
                 <!-- Start Back To Top  -->
-                <a id="backto-top"></a>
+                @*<a id="backto-top"></a>*@
                 <!-- End Back To Top  -->
             </div>
         </div>
