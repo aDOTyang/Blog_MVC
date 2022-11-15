@@ -56,7 +56,16 @@ builder.Services.AddSwaggerGen(s =>
     s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
 });
 
+// allows API to be accessed
+builder.Services.AddCors(obj =>
+{
+    obj.AddPolicy("DefaultPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
 var app = builder.Build();
+
+// applies API policy
+app.UseCors("DefaultPolicy");
 
 // calls ManageData method to manipulate database, scope creates an IServiceProvider
 var scope = app.Services.CreateScope();
