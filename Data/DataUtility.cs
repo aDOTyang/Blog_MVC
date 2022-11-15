@@ -115,8 +115,6 @@ namespace Blog_MVC.Data
 
                 throw;
             }
-
-
         }
     }
 }

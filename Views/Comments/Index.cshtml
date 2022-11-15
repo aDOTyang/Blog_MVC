@@ -16,14 +16,14 @@
                 <div class="page-title">
                     <h2 class="title mb--40">Recent Comments</h2>
                 </div>
-                @if (User.Identity!.IsAuthenticated)
+               @* @if (User.Identity!.IsAuthenticated)
                 {
                     <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
                         <span class="hover-flip-item">
                             <span class="b1" data-text="Write Something New">Write Something New</span>
                         </span>
                     </a>
-                }
+                }*@
             </div>
             <div class="col-lg-8 col-xl-8">
                 @foreach (Comment comment in Model)
