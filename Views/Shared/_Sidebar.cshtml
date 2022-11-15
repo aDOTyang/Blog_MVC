@@ -22,6 +22,7 @@
         </form>
     </div>
     <!-- End Search Widget  -->
+
     <!-- Start Categories Widget  -->
     <div class="axil-single-widget widget widget_categories mb--30 border border-warning rounded-3">
         <h5 class="widget-title mt-5">Categories</h5>
@@ -63,8 +64,8 @@
                         </h6>
                         <div>
                             <ul>
-                                <li>@blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
-                                <li>@blogPost.Comments.Count Comments</li>
+                                <li class="b3">Written on @blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
+                                <li class="b3">@blogPost.Comments.Count Comments</li>
                             </ul>
                         </div>
                     </div>

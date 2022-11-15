@@ -67,6 +67,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment, string? slug)
         {
             // temp test - remove later
@@ -99,9 +100,13 @@ namespace Blog_MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
-            return View(comment);
+
+            if(User.IsInRole("Administrator") || comment.AuthorId == _userManager.GetUserId(User)) {
+                return View(comment);
+            } else
+            {
+                return Unauthorized();
+            }
         }
 
         // POST: Comments/Edit/5
@@ -114,6 +119,11 @@ namespace Blog_MVC.Controllers
             if (id != comment.Id)
             {
                 return NotFound();
+            }
+
+            if (!User.IsInRole("Administrator") && comment.AuthorId != _userManager.GetUserId(User))
+            {
+                return Unauthorized();
             }
 
             if (ModelState.IsValid)
@@ -136,8 +146,8 @@ namespace Blog_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
+            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+            //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
             return View(comment);
         }
 

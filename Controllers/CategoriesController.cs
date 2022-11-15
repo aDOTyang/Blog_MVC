@@ -10,6 +10,7 @@ using Blog_MVC.Models;
 using Blog_MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using X.PagedList;
 
 namespace Blog_MVC.Controllers
 {
@@ -31,26 +32,35 @@ namespace Blog_MVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Categories.ToListAsync());
+            return View(await _context.Categories.Include(b => b.BlogPosts).ThenInclude(c => c.Comments).ToListAsync());
         }
 
         // GET: Categories/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNum)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            int pageSize = 5;
+            int page = pageNum ?? 1;
+
+            IPagedList<BlogPost> blogPosts = _context.BlogPosts.Where(b => b.CategoryId == id && b.IsDeleted == false && b.IsPublished == true)
+                                                               .Include(b => b.Comments)
+                                                               .Include(b => b.Category)
+                                                               .Include(b => b.Creator)
+                                                               .Include(b => b.Tags)
+                                                               .OrderByDescending(b => b.DateCreated)
+                                                               .ToPagedList(page, pageSize);
+
+            if (blogPosts == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(blogPosts);
         }
 
         // GET: Categories/Create
@@ -170,14 +180,14 @@ namespace Blog_MVC.Controllers
             {
                 _context.Categories.Remove(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-          return _context.Categories.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

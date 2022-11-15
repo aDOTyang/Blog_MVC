@@ -45,7 +45,7 @@ namespace Blog_MVC.Controllers
             //    return blogPostTags;
             //}
 
-            var applicationDbContext = _context.BlogPosts.Include(b => b.Category).Include(t => t.Tags);
+            var applicationDbContext = _context.BlogPosts.Include(b => b.Category).Include(c=>c.Comments).Include(t => t.Tags);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -149,7 +149,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> selectedTags)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage, CreatorId")] BlogPost blogPost, IEnumerable<int> selectedTags)
         {
             if (id != blogPost.Id)
             {

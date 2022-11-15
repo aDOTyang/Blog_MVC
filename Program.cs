@@ -5,6 +5,8 @@ using Blog_MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,8 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<IEmailSender, EmailService>();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
 // API google auth
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
@@ -34,7 +38,23 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 
 builder.Services.AddMvc();
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+// Add Swashbuckle for API display formatting
+builder.Services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc("v1", new OpenApiInfo {
+        Title = "Alex Blog API",
+        Version = "v1",
+        Description = "Serve up Blog Data using .Net 6 APIs",
+        Contact = new OpenApiContact
+        {
+            Name = "A.Yang",
+            Email = "AYangDevv@gmail.com",
+            Url = new Uri("https://www.linkedin.com/in/alexyanglinked/")
+        }
+    });
+    var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+});
 
 var app = builder.Build();
 
@@ -54,6 +74,17 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// more Swashbuckle API
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicAPI v1");
+    s.InjectStylesheet("/css/swagger.css");
+    s.InjectJavascript("/js/swagger.js");
+
+    s.DocumentTitle = "Alex Blog API";
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

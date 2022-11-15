@@ -20,9 +20,10 @@
                 {
                     <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
                         <span class="hover-flip-item">
-                        <span class="b1" data-text="Write Something New">Write Something New</span>
-                    </span>
-                </a>}
+                            <span class="b1" data-text="Write Something New">Write Something New</span>
+                        </span>
+                    </a>
+                }
             </div>
             <div class="col-lg-8 col-xl-8">
                 @foreach (BlogPost post in Model)
@@ -61,7 +62,18 @@
                                         </h6>
                                         <ul class="post-meta-list">
                                             <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
-                                            <li>@post.Comments.Count</li>
+                                            @if (post.Comments.Count > 1)
+                                            {
+                                                <li><span>@post.Comments.Count</span> total comments on this post.</li>
+                                            }
+                                            else if (post.Comments.Count == 1)
+                                            {
+                                                <li><span>@post.Comments.Count</span> comment on this post.</li>
+                                            }
+                                            else
+                                            {
+                                                <li>No one has commented on this post yet.</li>
+                                            }
                                         </ul>
                                     </div>
                                 </div>
@@ -70,7 +82,7 @@
                     </div>
                     <!-- End Post List  -->
                 }
-                
+
                 @*<div class="b2">Page @(Model.PageCount < Model.PageNumber ? 1 : Model.PageNumber) of @Model.PageCount</div>
 
                 <div class="b2">@Html.PagedListPager(Model, pageNum => Url.Action("Index",new {pageNum}))</div>*@
@@ -81,83 +93,3 @@
         </div>
     </div>
 </div>
-<!-- End Post List Wrapper  -->
-
-
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Abstract)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPublished)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastUpdated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Abstract)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsDeleted)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPublished)
-                </td>
-                <td>
-                    <img src="@_ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!, (int)DefaultImage.BlogPostImage)" class="img-fluid">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category!.Name)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-slug="@item.Slug">Details</a>
-                    @if(User.IsInRole("Administrator"))
-                    {
-                    <span>|</span>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-*@
