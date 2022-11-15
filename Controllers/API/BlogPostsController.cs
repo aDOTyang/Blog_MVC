@@ -37,8 +37,7 @@ namespace Blog_MVC.Controllers.API
         public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts(int num)
         {
             num = num == 0 ? 3 : num;
-            List<BlogPost> blogPosts = await _blogPostService.GetRecentBlogPostsAsync(num);
-            return blogPosts;
+            return await _context.BlogPosts.Where(b => b.IsPublished == true && b.IsDeleted == false).OrderByDescending(b=>b.DateCreated).Take(num).ToListAsync();
         }
 
         // GET: api/BlogPosts/5

@@ -45,7 +45,7 @@ namespace Blog_MVC.Controllers
             //    return blogPostTags;
             //}
 
-            var applicationDbContext = _context.BlogPosts.Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
+            var applicationDbContext = _context.BlogPosts.Where(b=>b.IsDeleted == false && b.IsPublished == true).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
             return View(await applicationDbContext.ToListAsync());
         }
 

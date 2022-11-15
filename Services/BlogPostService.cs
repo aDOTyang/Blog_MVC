@@ -93,7 +93,7 @@ namespace Blog_MVC.Services
         {
             try
             {
-                List<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Comments).ThenInclude(c => c.Author).Include(b => b.Category).Include(b => b.Tags).ToListAsync();
+                List<BlogPost> blogPosts = await _context.BlogPosts.Where(b => b.IsDeleted == false && b.IsPublished == true).Include(b => b.Comments).ThenInclude(c => c.Author).Include(b => b.Category).Include(b => b.Tags).ToListAsync();
                 return blogPosts.OrderByDescending(b => b.Comments.Count).ToList();
             }
             catch (Exception)
