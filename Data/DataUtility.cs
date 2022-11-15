@@ -79,34 +79,44 @@ namespace Blog_MVC.Data
         private static async Task SeedUsersAsync(ApplicationDbContext context, IConfiguration configuration, UserManager<BlogUser> userManager)
         {
             // checks ASPnetUsers table for existence of admin and creates if missing
-            if (!context.Users.Any(u => u.Email == _adminEmail))
+            try
             {
-                BlogUser adminUser = new()
+                if (!context.Users.Any(u => u.Email == _adminEmail))
                 {
-                    Email = _adminEmail,
-                    UserName = _adminEmail,
-                    FirstName = "Alex",
-                    LastName = "Yang",
-                    EmailConfirmed = true
-                };
-                await userManager.CreateAsync(adminUser, configuration["AdminPassword"] ?? Environment.GetEnvironmentVariable("AdminPassword"));
-                await userManager.AddToRoleAsync(adminUser, _adminRole);
+                    BlogUser adminUser = new()
+                    {
+                        Email = _adminEmail,
+                        UserName = _adminEmail,
+                        FirstName = "Alex",
+                        LastName = "Yang",
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(adminUser, configuration["AdminPassword"] ?? Environment.GetEnvironmentVariable("AdminPassword"));
+                    await userManager.AddToRoleAsync(adminUser, _adminRole);
+                }
+
+                // seeds Moderator
+                if (!context.Users.Any(u => u.Email == _modEmail))
+                {
+                    BlogUser modUser = new()
+                    {
+                        Email = _modEmail,
+                        UserName = _modEmail,
+                        FirstName = "Evil",
+                        LastName = "Alex",
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(modUser, configuration["ModeratorPassword"] ?? Environment.GetEnvironmentVariable("ModeratorPassword"));
+                    await userManager.AddToRoleAsync(modUser, _modRole);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            // seeds Moderator
-            if (!context.Users.Any(u => u.Email == _modEmail))
-            {
-                BlogUser modUser = new()
-                {
-                    Email = _modEmail,
-                    UserName = _modEmail,
-                    FirstName = "Evil",
-                    LastName = "Alex",
-                    EmailConfirmed = true
-                };
-                await userManager.CreateAsync(modUser, configuration["ModeratorPassword"] ?? Environment.GetEnvironmentVariable("ModeratorPassword"));
-                await userManager.AddToRoleAsync(modUser, _modRole);
-            }
+
         }
     }
 }
