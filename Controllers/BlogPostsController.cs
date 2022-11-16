@@ -84,7 +84,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> SelectedTags)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string stringTags)
         {
 
             ModelState.Remove("CreatorId");
@@ -114,7 +114,7 @@ namespace Blog_MVC.Controllers
                 await _context.SaveChangesAsync();
 
                 // add list of selected tags
-                await _blogPostService.AddTagsToBlogPostAsync(SelectedTags, blogPost.Id);
+                await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
@@ -150,7 +150,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage, CreatorId, DateCreated")] BlogPost blogPost, IEnumerable<int> selectedTags)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage, CreatorId, DateCreated, ImageData, ImageType")] BlogPost blogPost, IEnumerable<int> selectedTags)
         {
             if (id != blogPost.Id)
             {

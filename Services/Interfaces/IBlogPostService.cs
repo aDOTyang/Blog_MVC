@@ -19,6 +19,7 @@ namespace Blog_MVC.Services.Interfaces
         public Task RemoveAllTagsAsync(int blogPostId);
 
         public Task AddTagsToBlogPostAsync(IEnumerable<int> tagIds, int blogPostId);
+        public Task AddTagsToBlogPostAsync(string tagNames, int blogPostId);
 
         public IEnumerable<BlogPost> SearchBlogPosts(string searchString);
 
