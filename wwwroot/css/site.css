@@ -95,3 +95,25 @@ textarea {
     color: darkgray !important;
     border-color: lightgray;
 }
+
+.editBtns {
+    display: block;
+    width: 100% !important;
+}
+
+.deleteBtn {
+    color: #151515 !important;
+    background-color: gold !important;
+    border-color: gold !important;
+    display: block;
+    width: 100% !important;
+}
+
+
+.truedeleteBtn {
+    color: #e1e1e1 !important;
+    background-color: red !important;
+    border-color: red !important;
+    display: block;
+    width: 100% !important;
+}

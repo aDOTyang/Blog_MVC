@@ -37,15 +37,25 @@ namespace Blog_MVC.Controllers
         public async Task<IActionResult> Index(int? blogPostId)
         {
             List<BlogPost> blogPosts = new List<BlogPost>();
-            //List<Tag> blogPostTags = await _context.Tags.ToListAsync();
 
-            //if ()
-            //{
-            //    blogPostTags = await _context.Tags.Include(b => b.BlogPosts).ToListAsync();
-            //    return blogPostTags;
-            //}
+            if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+            {
+                var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == false).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
+                return View(await applicationDbContext.ToListAsync());
+            } else {
+                var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == false && b.IsPublished == true).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            
+        }
 
-            var applicationDbContext = _context.BlogPosts.Where(b=>b.IsDeleted == false && b.IsPublished == true).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
+        // GET: Deleted BlogPosts
+        [Authorize(Roles = "Administrator, Moderator")]
+        public async Task<IActionResult> DeletedPosts(int? blogPostId)
+        {
+            List<BlogPost> blogPosts = new List<BlogPost>();
+
+            var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == true).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -213,6 +223,7 @@ namespace Blog_MVC.Controllers
             var blogPost = await _context.BlogPosts
                 .Include(b => b.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (blogPost == null)
             {
                 return NotFound();
@@ -221,10 +232,43 @@ namespace Blog_MVC.Controllers
             return View(blogPost);
         }
 
+        /// <summary>
+        /// Flips IsDeleted status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // POST: BlogPosts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.BlogPosts == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.BlogPosts' is null.");
+            }
+            var blogPost = await _context.BlogPosts.FindAsync(id);
+            if (blogPost != null && blogPost.IsDeleted == false)
+            {
+                blogPost.IsDeleted = true;
+            }
+            else if (blogPost != null && blogPost.IsDeleted == true)
+            {
+                blogPost.IsDeleted = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// Removes blogpost entry from database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // POST: BlogPosts/Delete/5
+        [HttpPost, ActionName("TrueDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TrueDeleteConfirmed(int id)
         {
             if (_context.BlogPosts == null)
             {
@@ -233,9 +277,29 @@ namespace Blog_MVC.Controllers
             var blogPost = await _context.BlogPosts.FindAsync(id);
             if (blogPost != null)
             {
-                // revised to soft delete so posts can be retrieved
-                blogPost.IsDeleted = true;
-                //_context.BlogPosts.Remove(blogPost);
+                _context.BlogPosts.Remove(blogPost);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: BlogPosts/Publish/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Publish(int id)
+        {
+            if (_context.BlogPosts == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.BlogPosts'  is null.");
+            }
+            var blogPost = await _context.BlogPosts.FindAsync(id);
+            if (blogPost != null && blogPost.IsPublished == true)
+            {
+                blogPost.IsPublished = false;
+            } else if (blogPost != null && blogPost.IsPublished == false)
+            {
+                blogPost.IsPublished = true;
             }
 
             await _context.SaveChangesAsync();

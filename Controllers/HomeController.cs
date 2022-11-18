@@ -1,6 +1,10 @@
 ﻿using Blog_MVC.Data;
 using Blog_MVC.Models;
+using Blog_MVC.Services;
 using Blog_MVC.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -13,12 +17,16 @@ namespace Blog_MVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IBlogPostService _blogPostService;
+        private readonly IEmailSender _emailService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IBlogPostService blogPostService)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IBlogPostService blogPostService, IEmailSender emailService, UserManager<BlogUser> userManager)
         {
             _logger = logger;
             _context = context;
             _blogPostService = blogPostService;
+            _emailService = emailService;
+            _userManager = userManager;
         }
 
         // GET & POST: Pagination
@@ -43,6 +51,40 @@ namespace Blog_MVC.Controllers
             IPagedList<BlogPost> model = _blogPostService.SearchBlogPosts(searchString).ToPagedList(page, pageSize);
 
             return View(nameof(Index), model);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ContactMe()
+        {
+            EmailData model = new()
+            {
+                EmailAddress = User.Identity!.Name,
+                Subject = "Contact Me: From My Blog"
+            };
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ContactMe(EmailData model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _emailService.SendEmailAsync(model.EmailAddress!, model.Subject!, model.Message!);
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index", "Home");
+                    throw;
+                }
+            }
+            return RedirectToAction("ContactMe", "Home");
         }
 
         public IActionResult Privacy()

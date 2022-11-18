@@ -1,0 +1,59 @@
+﻿@model Blog_MVC.Models.EmailData
+@using Blog_MVC.Services
+
+
+<div class="card">
+    <form asp-action="ContactMe" asp-controller="Home" method="post">
+        @*<input type="hidden" asp-for="@Model.EmailAddress" />*@
+        <div class="card-header">
+            <h3 class="mt-2 ms-5 text-dark">Sent From: @Model.EmailAddress</h3>
+        </div>
+        <div class="card-body mx-5">
+            <div class="row row-cols-1 text-dark">
+                <div class="col">
+                    <label asp-for="@Model.EmailAddress" class="form-label">To: </label>
+                    <textarea typeof="email" readonly class="form-control" asp-for="@Model.EmailAddress"></textarea>
+                </div>
+                <div class="col">
+                    <label asp-for="Subject" class="form-label mt-2">Subject: </label>
+                    <input type="text" class="form-control" asp-for="Subject">
+                </div>
+                <div class="col">
+                    <label asp-for="Message" for="contact-message" class="form-label mt-2">Message:</label>
+                    <textarea typeof="email" class="form-control" asp-for="Message" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between p-3">
+                <a asp-action="Index" asp-controller="Home" class="axil-button btn btn-primary rounded-pill" type="submit">Nevermind</a>
+                <button type="submit" class="axil-button btn btn-primary rounded-pill">Send!</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@*<form asp-controller="Home" asp-action="ContactMe" method="post">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group mt-3 ms-3">
+                <label>Sent From: </label>
+                <label>@Model.EmailAddress</label>
+                <input asp-for="EmailAddress" type="hidden" />
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group card-header">
+                <label>Subject:</label>
+                <input asp-for="Subject" />
+            </div>
+        </div>
+        <div class="col-12 card-body">
+            <div class="form-group ms-3">
+                <label for="contact-message">Your Message</label>
+                <textarea asp-for="Message"></textarea>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="axil-button btn btn-lg btn-primary rounded-pill">Send</button>
+            </div>
+        </div>
+    </div>
+</form>*@

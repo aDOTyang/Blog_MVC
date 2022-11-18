@@ -1,87 +1,86 @@
-﻿@model Blog_MVC.Models.BlogPost
+﻿@model IEnumerable<Blog_MVC.Models.BlogPost>
+@using Blog_MVC.Enums
+@using Blog_MVC.Services.Interfaces
+@inject IImageService _ImageService
 
 @{
-    ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>BlogPost</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Abstract)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Abstract)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageData)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+@*
+<div class="col-lg-8 col-xl-8">
+    @foreach (BlogPost post in Model)
+    {
+        <!-- Start Post List  -->
+        <div class="content-block post-list-view mt--30">
+            <div class="post-thumbnail">
+                <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
+            </div>
+            <div class="post-content col-8 col-md-5">
+                <div class="post-cat">
+                    <div class="post-cat-list">
+                        <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
+                            <span class="hover-flip-item">
+                                <span data-text="@post.Category!.Name">@post.Category.Name</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <h4 class="title">
+                    <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
+                        @post.Title
+                    </a>
+                </h4>
+                <div class="post-meta-wrapper">
+                    <div class="post-meta">
+                        <div class="content">
+                            <h6>
+                                @if (post.IsPublished)
+                                {
+                                    <span class="text-success">Published</span>
+                                }
+                                else if (!post.IsPublished)
+                                {
+                                    <span class="text-warning">Unpublished</span>
+                                }
+                            </h6>
+                            <h6 class="post-author-name">
+                                <span class="hover-flip-item-wrapper">
+                                    <span class="hover-flip-item">
+                                        <span data-text="@post.Creator?.FullName">@post.Creator?.FullName</span>
+                                    </span>
+                                </span>
+                            </h6>
+                            <ul class="post-meta-list">
+                                <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
+                                @if (post.Comments.Count > 1)
+                                {
+                                    <li><span>@post.Comments.Count</span> total comments on this post.</li>
+                                }
+                                else if (post.Comments.Count == 1)
+                                {
+                                    <li><span>@post.Comments.Count</span> comment on this post.</li>
+                                }
+                                else
+                                {
+                                    <li>No one has commented on this post yet.</li>
+                                }
+                            </ul>
+                        </div>
+                        <form asp-action="Delete">
+                            <input type="submit" class="btn btn-lg btn-warning rounded-pill" value=" @if (post.IsDeleted)
+                               {
+                        <text>Un-Delete</text>
+                        }
+                        else if (!post.IsDeleted)
+                        {
+                        <text>Delete</text>
+                        }" /> |
+                            <a asp-action="Index" class="btn btn-lg btn-primary rounded-pill">Never Mind</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+*@

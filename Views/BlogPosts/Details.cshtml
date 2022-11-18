@@ -2,9 +2,11 @@
 @using Blog_MVC.Enums
 @using Blog_MVC.Services.Interfaces
 @inject IImageService _ImageService
+@inject IBlogPostService _blogPostService
 
 @{
     ViewData["Title"] = "Details";
+    var tags = (await _blogPostService.GetTagsAsync()).OrderBy(t => t.BlogPosts.Count);
 }
 
 <!-- Start Post Single Wrapper  -->
@@ -13,7 +15,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <!-- Start Banner Area -->
-                <div class="banner banner-single-post post-formate post-layout axil-section-gapBottom">
+                <div class="banner banner-single-post post-formate post-layout">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12">
@@ -23,9 +25,9 @@
                                     <div class="post-content">
                                         <div class="post-cat">
                                             <div class="post-cat-list">
-                                                <a class="hover-flip-item-wrapper" href="#">
+                                                <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">
                                                     <span class="hover-flip-item">
-                                                        <span data-text="FEATURED POST">FEATURED POST</span>
+                                                        <span data-text="@Model.Category!.Name">@Model.Category!.Name</span>
                                                     </span>
                                                 </a>
                                             </div>
@@ -33,11 +35,19 @@
                                         <h1 class="title">
                                             @Model.Title
                                         </h1>
+                                        <p class="mt-5">@Model.Abstract</p>
+                                        <div class="b2">@Html.Raw(Model.Content)</div>
                                         <!-- Post Meta  -->
                                         <div class="post-meta-wrapper">
                                             <div class="post-meta">
                                                 <div class="content">
-                                                    <ul class="post-meta-list">
+                                                    <div class="tagcloud axil-single-widget mt-2">
+                                                        @foreach (Tag tag in tags)
+                                                        {
+                                                            <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id" id="currentPostTags">@tag.Name</a>
+                                                        }
+                                                    </div>
+                                                    <ul class="post-meta-list mt-3">
                                                         <li>@Model.DateCreated.ToString("MMM dd, yyyy")</li>
                                                         <li>@Model.Comments.Count Comments</li>
                                                     </ul>
@@ -54,23 +64,8 @@
                 </div>
                 <!-- End Banner Area -->
 
-                <div class="axil-post-details">
-                    @Html.Raw(Model.Content)
-                    <div class="tagcloud">
-                        @foreach (Tag tag in Model.Tags)
-                        {
-                            <a asp-controller="Tag" asp-action="Details" asp-route-id="@tag.Id">@tag.Name</a>
-                        }
-                    </div>
-
-                    @*                    <div class="social-share-block">
-                    <div class="post-like">
-                    <a href="#"><i class="fal fa-thumbs-up"></i><span>2.2k Likes</span></a>
-                    </div>
-                    </div>*@
-
                     <!-- Start Author  -->
-                    <div class="about-author border-top border-secondary border-1">
+                    <div class="about-author">
                         <div class="media">
                             <div class="thumbnail">
                                 <a href="#">
@@ -171,7 +166,6 @@
                                                         </p>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </li>
@@ -186,7 +180,6 @@
                                 }
                                 <a asp-action="Index" asp-controller="BlogPosts" class="btn btn-primary rounded-pill mt-3">Back to List</a>
                             </div>
-                        </div>
                         <!-- End Comment Area  -->
 
                     </div>
@@ -201,6 +194,7 @@
         </div>
     </div>
 </div>
+
 <!-- End Post Single Wrapper  -->
 @section scripts{
     <script>
@@ -210,4 +204,13 @@
                 console.error(error);
             });
     </script>
+
+@*    <script>
+        function filterTags(ele) {
+            let input = document.getElementById('currentPostTags');
+            if (ele.classList.contains('hideTag')) {
+                return;
+            }
+        }
+    </script>*@
 }

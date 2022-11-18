@@ -16,26 +16,38 @@ namespace Blog_MVC.Services
         }
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var emailSender = _mailSettings.EmailAddress ?? Environment.GetEnvironmentVariable("EmailAddress");
-            MimeMessage newEmail = new();
-            newEmail.Sender = MailboxAddress.Parse(emailSender);
-            foreach (var emailAddress in email.Split(";"))
+            // var emailSender = _mailSettings.EmailAddress ?? Environment.GetEnvironmentVariable("EmailAddress");
+            // gather configuration data
+            string emailAddress = _mailSettings.EmailAddress ?? Environment.GetEnvironmentVariable("EmailAddress")!;
+            string emailHost = _mailSettings.EmailHost ?? Environment.GetEnvironmentVariable("EmailHost")!;
+            int emailPort = _mailSettings.EmailPort != 0 ? _mailSettings.EmailPort : int.Parse(Environment.GetEnvironmentVariable("EmailPort")!);
+            string emailPassword = _mailSettings.EmailPassword ?? Environment.GetEnvironmentVariable("EmailPassword")!;
+
+            MimeMessage newEmail = new()
+            {
+                Sender = MailboxAddress.Parse("ayangdevv@gmail.com")
+            };
+
+            if (subject.Contains("Contact Me:"))
             {
                 newEmail.To.Add(MailboxAddress.Parse(emailAddress));
+            } else
+            {
+                newEmail.To.Add(MailboxAddress.Parse(email));
             }
+
             newEmail.Subject = subject;
+
             BodyBuilder emailBody = new();
+
             emailBody.HtmlBody = htmlMessage;
             newEmail.Body = emailBody.ToMessageBody();
-            //AT this point lets log into out smtp client
+            
             using SmtpClient smtpClient = new();
             try
             {
-                var host = _mailSettings.EmailHost ?? Environment.GetEnvironmentVariable("EmailHost");
-                var port = _mailSettings.EmailPort != 0 ? _mailSettings.EmailPort : int.Parse(Environment.GetEnvironmentVariable("EmailPort")!);
-                var password = _mailSettings.EmailPassword ?? Environment.GetEnvironmentVariable("EmailPassword");
-                await smtpClient.ConnectAsync(host, port, SecureSocketOptions.StartTls);
-                await smtpClient.AuthenticateAsync(emailSender, password);
+                await smtpClient.ConnectAsync(emailHost, emailPort, SecureSocketOptions.StartTls);
+                await smtpClient.AuthenticateAsync(emailAddress, emailPassword);
                 await smtpClient.SendAsync(newEmail);
                 await smtpClient.DisconnectAsync(true);
 

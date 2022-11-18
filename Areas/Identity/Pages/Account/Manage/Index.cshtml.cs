@@ -4,9 +4,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Blog_MVC.Models;
+using Blog_MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,13 +19,16 @@ namespace Blog_MVC.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
+        private readonly IImageService _ImageService;
 
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager)
+            SignInManager<BlogUser> signInManager,
+            IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _ImageService = imageService;
         }
 
         /// <summary>
@@ -59,6 +64,22 @@ namespace Blog_MVC.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(25, ErrorMessage = "The {0} must be at least {2} and max of {1} characters long.", MinimumLength = 2)]
+            public string LastName { get; set; }
+
+            public byte[] ImageData { get; set; }
+            public string ImageType { get; set; }
+
+            [NotMapped]
+            public IFormFile BlogUserImage { get; set; }
         }
 
         private async Task LoadAsync(BlogUser user)
@@ -70,7 +91,11 @@ namespace Blog_MVC.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ImageData = user.ImageData,
+                ImageType = user.ImageType
             };
         }
 
@@ -99,6 +124,16 @@ namespace Blog_MVC.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
+
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+
+            if (Input.BlogUserImage != null)
+            {
+                user.ImageData = await _ImageService.ConvertFileToByteArrayAsync(Input.BlogUserImage);
+                user.ImageType = Input.BlogUserImage.ContentType;
+            }
+            await _userManager.UpdateAsync(user);
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)

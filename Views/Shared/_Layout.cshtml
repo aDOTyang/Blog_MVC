@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Blog_MVC</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -21,10 +21,12 @@
 
 <body>
     <div class="main-wrapper">
+        @* cursor highlighter *@
         @*<div class="mouse-cursor cursor-outer"></div>
         <div class="mouse-cursor cursor-inner"></div>*@
 
-        <div id="my_switcher" class="my_switcher">
+        @* light/dark mode switcher *@
+        @*<div id="my_switcher" class="my_switcher">
             <ul>
                 <li>
                     <a href="javascript: void(0);" data-theme="light" class="setColor light switcher">
@@ -37,10 +39,10 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div>*@
 
         <!-- Start Header -->
-        <header class="header axil-header  header-light header-sticky header-with-shadow">
+        <header class="header axil-header header-light header-sticky header-with-shadow">
             <div class="header-wrap">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-3 col-12">
@@ -61,6 +63,7 @@
                                     <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
                                     <li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
                                     <li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
+                                    <li><a asp-controller="Home" asp-action="ContactMe">Contact Me</a></li>
                                 </ul>
                                 <!-- End Mainmanu Nav -->
                             </nav>
