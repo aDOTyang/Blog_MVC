@@ -32,11 +32,11 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <h1 class="title">
+                                        <h1 class="title lightText">
                                             @Model.Title
                                         </h1>
-                                        <p class="mt-5">@Model.Abstract</p>
-                                        <div class="b2">@Html.Raw(Model.Content)</div>
+                                        <p class="mt-5 lightText">@Model.Abstract</p>
+                                        <span class="b2 lightText">@Html.Raw(Model.Content)</span>
                                         <!-- Post Meta  -->
                                         <div class="post-meta-wrapper">
                                             <div class="post-meta">
@@ -44,12 +44,12 @@
                                                     <div class="tagcloud axil-single-widget mt-2">
                                                         @foreach (Tag tag in tags)
                                                         {
-                                                            <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id" id="currentPostTags">@tag.Name</a>
+                                                            <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id" id="currentPostTags" class="lightText">@tag.Name</a>
                                                         }
                                                     </div>
                                                     <ul class="post-meta-list mt-3">
-                                                        <li>@Model.DateCreated.ToString("MMM dd, yyyy")</li>
-                                                        <li>@Model.Comments.Count Comments</li>
+                                                        <li class="lightText">@Model.DateCreated.ToString("MMM dd, yyyy")</li>
+                                                        <li class="lightText">@Model.Comments.Count Comments</li>
                                                     </ul>
                                                 </div>
                                             </div>

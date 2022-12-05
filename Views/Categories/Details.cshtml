@@ -10,7 +10,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1></h1>
+<h3></h3>
 
 <!-- Start Post List Wrapper  -->
 <div class="axil-post-list-area axil-section-gap">
@@ -20,13 +20,13 @@
                 <div class="page-title">
                     <h2 class="title mb--40 lightText">Previous posts on this topic:</h2>
                 </div>
-@*                @if (User.Identity!.IsAuthenticated)
+                @*                @if (User.Identity!.IsAuthenticated)
                 {
-                    <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
-                        <span class="hover-flip-item">
-                            <span class="b1" data-text="Write Something New">Write Something New</span>
-                        </span>
-                    </a>
+                <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
+                <span class="hover-flip-item">
+                <span class="b1" data-text="Write Something New">Write Something New</span>
+                </span>
+                </a>
                 }*@
             </div>
             <div class="col-lg-8 col-xl-8">
@@ -41,7 +41,7 @@
                                     <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                                 </a>
                             </div>
-                            <div class="post-content">
+                            <div class="post-content border-warning col-8 col-md-5">
                                 <div class="post-cat">
                                     <div class="post-cat-list">
                                         <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
@@ -51,7 +51,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <h4 class="title">
+                                <h4 class="title lightText">
                                     <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
                                         @post.Title
                                     </a>
@@ -60,20 +60,53 @@
                                     <div class="post-meta">
                                         <div class="content">
                                             <h6 class="post-author-name">
-                                                <span class="hover-flip-item-wrapper">
-                                                    <span class="hover-flip-item">
-                                                        <span data-text="@post.Creator?.FullName">@post.Creator?.FullName</span>
-                                                    </span>
-                                                </span>
+                                                <span class="lightText">@post.Creator?.FullName</span>
                                             </h6>
                                             <ul class="post-meta-list">
-                                                <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
-                                                <li>@post.Comments.Count</li>
+                                                <li class="lightText">@post.DateCreated.ToString("MMM dd, yyyy")</li>
+                                                @if (post.Comments.Count > 1)
+                                                {
+                                                    <li class="lightText"><span>@post.Comments.Count</span> total comments on this post.</li>
+                                                }
+                                                else if (post.Comments.Count == 1)
+                                                {
+                                                    <li class="lightText"><span>@post.Comments.Count</span> comment on this post.</li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="lightText">No one has commented on this post yet.</li>
+                                                }
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                            {
+                                <div class="row align-items-center justify-content-center mx-1">
+                                    <div class="col-12 text-center">
+                                        <form asp-controller="BlogPosts" asp-action="Publish" method="post">
+                                            <input type="hidden" asp-for="@post.Id" name="id" />
+                                            @{
+                                                string btnPublish = post.IsPublished ? "Un-Publish" : "Publish";
+                                            }
+                                            <input type="submit" class="btn btn-primary rounded-pill editBtns" value="@btnPublish" />
+                                        </form>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <a asp-controller="BlogPosts" asp-action="Edit" asp-route-id="@post.Id" class="btn btn-info rounded-pill editBtns">Edit</a>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <form asp-controller="BlogPosts" asp-action="Delete" method="post">
+                                            <input type="hidden" asp-for="@post.Id" name="id" />
+                                            @{
+                                                string btnDelete = post.IsDeleted ? "Un-Delete" : "Delete";
+                                            }
+                                            <input type="submit" class="btn btn-warning rounded-pill deleteBtn" value="@btnDelete">
+                                        </form>
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <!-- End Post List  -->
                     }
@@ -90,7 +123,6 @@
     </div>
 </div>
 <!-- End Post List Wrapper  -->
-
 @*
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

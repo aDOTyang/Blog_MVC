@@ -654,7 +654,7 @@ p {
   font-size: var(--font-size-b1);
   line-height: var(--line-height-b1);
   font-weight: var(--p-regular);
-  color: var(--color-body);
+  /*color: var(--color-body);*/
   margin: 0 0 40px;
 }
 @media only screen and (max-width: 767px) {
