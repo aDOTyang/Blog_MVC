@@ -69,7 +69,7 @@ namespace Blog_MVC.Controllers
             }
 
             var blogPost = await _context.BlogPosts
-                .Include(b => b.Category).Include(c => c.Comments).ThenInclude(c => c.Author)
+                .Include(b => b.Category).Include(c => c.Comments).ThenInclude(c => c.Author).Include(c=>c.Tags)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
             if (blogPost == null)

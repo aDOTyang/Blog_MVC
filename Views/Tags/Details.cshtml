@@ -1,24 +1,119 @@
-﻿@model Blog_MVC.Models.Tag
+﻿@model IPagedList<Blog_MVC.Models.BlogPost>
+@using Blog_MVC.Enums
+@using Blog_MVC.Services.Interfaces
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@inject IImageService _ImageService
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1></h1>
 
-<div>
-    <h4>Tag</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
+<!-- Start Post List Wrapper  -->
+<div class="axil-post-list-area axil-section-gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-title">
+                    <h2 class="title mb--40">Previous posts on this topic:</h2>
+                </div>
+@*                @if (User.Identity!.IsAuthenticated)
+                {
+                    <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
+                        <span class="hover-flip-item">
+                            <span class="b1" data-text="Write Something New">Write Something New</span>
+                        </span>
+                    </a>
+                }*@
+            </div>
+            <div class="col-lg-8 col-xl-8">
+                @foreach (BlogPost post in Model)
+                {
+                    {
+                        <!-- Start Post List  -->
+                        <div class="content-block post-list-view mt--30">
+                            <div class="post-thumbnail">
+                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
+                                    <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
+                                </a>
+                            </div>
+                            <div class="post-content">
+                                <div class="post-cat">
+                                    <div class="post-cat-list">
+                                        <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
+                                            <span class="hover-flip-item">
+                                                <span data-text="@post.Category!.Name">@post.Category.Name</span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <h4 class="title">
+                                    <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
+                                        @post.Title
+                                    </a>
+                                </h4>
+                                <div class="post-meta-wrapper">
+                                    <div class="post-meta">
+                                        <div class="content">
+                                            <h6 class="post-author-name">
+                                                <span class="hover-flip-item-wrapper">
+                                                    <span class="hover-flip-item">
+                                                        <span data-text="@post.Creator?.FullName">@post.Creator?.FullName</span>
+                                                    </span>
+                                                </span>
+                                            </h6>
+                                            <ul class="post-meta-list">
+                                                <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
+                                                <li>@post.Comments.Count</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Post List  -->
+                    }
+                }
+
+                <div class="b2">Page @(Model.PageCount < Model.PageNumber ? 1 : Model.PageNumber) of @Model.PageCount</div>
+
+                <div class="b2">@Html.PagedListPager(Model, pageNum => Url.Action("Details",new {pageNum, id=Model.FirstOrDefault()?.CategoryId}))</div>
+            </div>
+            <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
+                <partial name="_Sidebar" />
+            </div>
+        </div>
+    </div>
 </div>
+<!-- End Post List Wrapper  -->
+
+@*
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+*@
+
+@*<h4 class="ms-5 mt-5">Edit This Tag Name</h4>
+<hr />
+<div class="row ms-5">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control bg-light text-dark" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+*@
+@*
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary rounded-pill">Edit</a> |
+    <a asp-action="Index" class="btn btn-primary rounded-pill">Back to List</a>
+</div>
+*@

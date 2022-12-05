@@ -26,7 +26,6 @@ namespace Blog_MVC.Controllers
         }
 
         // GET: Comments
-        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -87,6 +86,7 @@ namespace Blog_MVC.Controllers
             return View(comment);
         }
 
+        [AllowAnonymous]
         // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -113,6 +113,7 @@ namespace Blog_MVC.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BlogPostId,AuthorId,DateCreated,LastUpdated,UpdateReason,Body")] Comment comment)
         {
@@ -152,6 +153,7 @@ namespace Blog_MVC.Controllers
         }
 
         // GET: Comments/Delete/5
+        [AllowAnonymous]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Comments == null)
@@ -173,6 +175,7 @@ namespace Blog_MVC.Controllers
 
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

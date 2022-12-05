@@ -119,7 +119,7 @@ namespace Blog_MVC.Services
         {
             try
             {
-                return await _context.Categories.Include(c => c.BlogPosts).ToListAsync();
+                return await _context.Categories.Include(c => c.BlogPosts).OrderByDescending(c=>c.BlogPosts.Count()).ToListAsync();
             }
             catch (Exception)
             {

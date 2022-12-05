@@ -24,36 +24,9 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-between p-3">
-                <a asp-action="Index" asp-controller="Home" class="axil-button btn btn-primary rounded-pill" type="submit">Nevermind</a>
                 <button type="submit" class="axil-button btn btn-primary rounded-pill">Send!</button>
+                <a asp-action="Index" asp-controller="Home" class="axil-button btn btn-primary rounded-pill" type="submit">Nevermind</a>
             </div>
         </div>
     </form>
 </div>
-
-@*<form asp-controller="Home" asp-action="ContactMe" method="post">
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group mt-3 ms-3">
-                <label>Sent From: </label>
-                <label>@Model.EmailAddress</label>
-                <input asp-for="EmailAddress" type="hidden" />
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="form-group card-header">
-                <label>Subject:</label>
-                <input asp-for="Subject" />
-            </div>
-        </div>
-        <div class="col-12 card-body">
-            <div class="form-group ms-3">
-                <label for="contact-message">Your Message</label>
-                <textarea asp-for="Message"></textarea>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="axil-button btn btn-lg btn-primary rounded-pill">Send</button>
-            </div>
-        </div>
-    </div>
-</form>*@

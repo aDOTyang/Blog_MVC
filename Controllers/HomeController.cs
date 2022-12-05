@@ -35,7 +35,7 @@ namespace Blog_MVC.Controllers
             int pageSize = 5;
             // if null, sets page = 1
             int page = pageNum ?? 1;
-            
+
             IPagedList<BlogPost> model = (await _blogPostService.GetAllBlogPostsAsync()).Where(b=>b.IsDeleted == false && b.IsPublished == true).ToPagedList(page, pageSize);
 
             return View(model);

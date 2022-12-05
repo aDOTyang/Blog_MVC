@@ -14,9 +14,19 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
+    background-color: #151515;
+    color: #e5e5e5;
+}
+
+.mainmenu-nav {
+    background-color: #151515;
+    color: #e5e5e5;
+}
+
+.lightText {
+    color: #e5e5e5 !important;
 }
 
 .content {
@@ -116,4 +126,15 @@ textarea {
     border-color: red !important;
     display: block;
     width: 100% !important;
+}
+
+.img-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.catImage {
+    height: 100%;
+    min-height:3rem;
+    max-height: 5rem;
 }

@@ -13,7 +13,7 @@
 
     <!-- Start Search Widget  -->
     <div class="axil-single-widget widget widget_search mb--30 border border-warning rounded-3">
-        <h5 class="widget-title">Search</h5>
+        <h5 class="widget-title lightText">Search</h5>
         <form asp-action="SearchIndex" asp-controller="Home">
             <div class="axil-search form-group">
                 <button type="submit" class="search-button"><i class="fal fa-search"></i></button>
@@ -22,20 +22,21 @@
         </form>
     </div>
     <!-- End Search Widget  -->
-
     <!-- Start Categories Widget  -->
-    <div class="axil-single-widget widget widget_categories mb--30 border border-warning rounded-3">
-        <h5 class="widget-title mt-5">Categories</h5>
+    <div class="axil-single-widget widget widget_categories mb--30 border border-warning rounded-3 px-3">
+        <h5 class="widget-title mt-3 lightText">Categories</h5>
         <ul>
             @foreach (Category category in (await _BlogPostService.GetCategoriesAsync()).Take(4))
             {
                 <li class="cat-item">
-                    <a class="inner" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
-                        <div class="thumbnail">
-                            <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!,category.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Category Image">
-                        </div>
-                        <div class="content text-break">
-                            <h5 class="title">@category.Name</h5>
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="container-fluid text-center">
+                                <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!,category.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Category Image" class="post-thumbnail catImage">
+                            </div>
+                            <div class="text-center mt-2">
+                                <h5 class="title lightText">@category.Name</h5>
+                            </div>
                         </div>
                     </a>
                 </li>
@@ -45,10 +46,9 @@
     <!-- End Categories Widget  -->
     <!-- Start Popular Posts  -->
     <div class="axil-single-widget widget widget_postlist mb--30 border border-warning rounded-3">
-        <h5 class="widget-title">Popular Posts</h5>
+        <h5 class="widget-title lightText">Popular Posts</h5>
         <!-- Start Post List  -->
         <div class="post-medium-block">
-
             @foreach (BlogPost blogPost in (await _BlogPostService.GetPopularBlogPostsAsync()).Take(3))
             {
                 <!-- Start Single Post -->
@@ -59,20 +59,19 @@
                         </a>
                     </div>
                     <div class="post-content">
-                        <h6 class="title">
+                        <h6 class="title lightText">
                             <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">@blogPost.Title</a>
                         </h6>
                         <div>
                             <ul>
-                                <li class="b3">Written on @blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
-                                <li class="b3">@blogPost.Comments.Count Comments</li>
+                                <li class="b3 lightText">Written on @blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
+                                <li class="b3 lightText">@blogPost.Comments.Count Comments</li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- End Single Post -->
             }
-
         </div>
         <!-- End Post List  -->
 
@@ -80,7 +79,7 @@
     <!-- End Popular Posts  -->
     <!-- Start Social Icon Links  -->
     <div class="axil-single-widget widget widget_social mb--30 border border-warning rounded-3">
-        <h5 class="widget-title">Check out my other work!</h5>
+        <h5 class="widget-title lightText">Check out my other work!</h5>
         <!-- Start Post List  -->
         <ul class="social-icon md-size justify-content-center">
             <li><a href="https://alexyang.netlify.app/"><i class="bi bi-journal-album"></i></a></li>

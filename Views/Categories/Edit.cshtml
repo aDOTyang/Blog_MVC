@@ -1,4 +1,7 @@
-﻿@model Blog_MVC.Models.Category
+﻿@model Blog_MVC.Models.Category;
+@using Blog_MVC.Enums
+@using Blog_MVC.Services.Interfaces;
+@inject IImageService _ImageService;
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,40 +9,42 @@
 
 <h1>Edit</h1>
 
-<h4>Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="post-single-wrapper axil-section-gap">
+    <div class="container mt-5 col-md-6">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImageData" />
-            <input type="hidden" asp-for="ImageType" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryImage" class="control-label"></label>
-                <img id="categoryImage" class="img-fluid" src="~/img/DefaultBlog.png" />
-                <input asp-for="CategoryImage" class="form-control" accept=".png,.jpg,.jpeg,.gif,.svg"
-                       onchange="document.getElementById('categoryImage').src= window.URL.createObjectURL(this.files[0])" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <h4 class="lightText">Edit This Category</h4>
+            <div class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImageData" />
+                <input type="hidden" asp-for="ImageType" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Category Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <label asp-for="CategoryImage" class="control-label"></label>
+                    <img id="categoryImage" class="img-fluid border rounded-3 m-2" src="@_ImageService.ConvertByteArrayToFile(Model.ImageData!, Model.ImageType!,(int)DefaultImage.CategoryImage)" />
+                    <input asp-for="CategoryImage" class="form-control mt-3" accept=".png,.jpg,.jpeg,.gif,.svg"
+                           onchange="document.getElementById('categoryImage').src= window.URL.createObjectURL(this.files[0])" />
+                </div>
+                <div class="form-group row justify-content-between">
+                    <div class="col-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                    <div class="col-3">
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -9,6 +9,7 @@ using Blog_MVC.Data;
 using Blog_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using X.PagedList;
 
 namespace Blog_MVC.Controllers
 {
@@ -31,21 +32,30 @@ namespace Blog_MVC.Controllers
 
         // GET: Tags/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNum)
         {
-            if (id == null || _context.Tags == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var tag = await _context.Tags
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tag == null)
+            int pageSize = 5;
+            int page = pageNum ?? 1;
+
+            IPagedList<BlogPost> blogPosts = _context.BlogPosts.Where(b => b.IsDeleted == false && b.IsPublished == true)
+                                                               .Include(b => b.Comments)
+                                                               .Include(b => b.Category)
+                                                               .Include(b => b.Creator)
+                                                               .Include(b => b.Tags)
+                                                               .OrderByDescending(b => b.DateCreated)
+                                                               .ToPagedList(page, pageSize);
+
+            if (blogPosts == null)
             {
                 return NotFound();
             }
 
-            return View(tag);
+            return View(blogPosts);
         }
 
         // GET: Tags/Create

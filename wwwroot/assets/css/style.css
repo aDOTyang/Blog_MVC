@@ -9655,8 +9655,8 @@ Post List Style
 .content-block.post-list-view.is-active .post-content, .content-block.post-list-view:hover .post-content {
   -webkit-box-shadow: var(--shadow-primary);
           box-shadow: var(--shadow-primary);
-  background: var(--color-white);
-  border: 1px solid var(--color-white);
+  background: rgb(#151515);
+  /*border: 1px solid var(--color-white);*/
 }
 .content-block.post-list-view:hover .post-thumbnail img {
   -webkit-transform: scale(1.1);
@@ -10108,7 +10108,7 @@ ul.post-meta-list li:last-child::after {
 Sidebar Styles  
 ----------------------*/
 .axil-single-widget {
-  background: #FBFBFD;
+  background: #151515;
   padding: 30px;
 }
 @media only screen and (max-width: 767px) {
@@ -10160,7 +10160,7 @@ Sidebar Styles
           flex-basis: 50%;
 }
 .axil-single-widget.widget_categories ul li.cat-item .inner {
-  background: #FBFBFD;
+  background: #151515;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -11884,7 +11884,7 @@ body.active-dark-mode .axil-header {
 body.active-dark-mode .bg-color-grey {
   background: #212121;
 }
-body.active-dark-mode .bg-color-white {
+body.active-dark-mode . {
   background: #1A1A1A;
 }
 body.active-dark-mode .bg-color-extra03 {

@@ -9,12 +9,12 @@
 }
 
 <!-- Start Post List Wrapper  -->
-<div class="axil-post-list-area axil-section-gap bg-color-white">
+<div class="axil-post-list-area axil-section-gap ">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title">
-                    <h2 class="title mb--40">Things I wrote</h2>
+                    <h2 class="title mb--40 lightText">Things I wrote</h2>
                 </div>
             </div>
             @if (User.Identity!.IsAuthenticated)
@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         <a class="mb-3 hover-flip-item-wrapper" asp-action="DeletedPosts" asp-controller="BlogPosts">
                             <span class="hover-flip-item">
-                                <span class="b1" data-text="View Deleted Posts">View Deleted Posts</span>
+                                <span class="b1 ms-5" data-text="View Deleted Posts">View Deleted Posts</span>
                             </span>
                         </a>
                     </div>
@@ -47,26 +47,26 @@
                                 <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                             </a>
                         </div>
-                        @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
-                        {
-                            <div class="post-content col-8 col-md-5">
-                                <div class="post-cat">
-                                    <div class="post-cat-list">
-                                        <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
-                                            <span class="hover-flip-item">
-                                                <span data-text="@post.Category!.Name">@post.Category.Name</span>
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <h4 class="title">
-                                    <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
-                                        @post.Title
+                        <div class="post-content border-warning col-8 col-md-5">
+                            <div class="post-cat">
+                                <div class="post-cat-list">
+                                    <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
+                                        <span class="hover-flip-item">
+                                            <span data-text="@post.Category!.Name">@post.Category.Name</span>
+                                        </span>
                                     </a>
-                                </h4>
-                                <div class="post-meta-wrapper">
-                                    <div class="post-meta">
-                                        <div class="content">
+                                </div>
+                            </div>
+                            <h4 class="title lightText">
+                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
+                                    @post.Title
+                                </a>
+                            </h4>
+                            <div class="post-meta-wrapper">
+                                <div class="post-meta">
+                                    <div class="content">
+                                        @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                                        {
                                             <h6>
                                                 @if (post.IsPublished)
                                                 {
@@ -77,32 +77,31 @@
                                                     <span class="text-warning">Unpublished</span>
                                                 }
                                             </h6>
-                                            <h6 class="post-author-name">
-                                                <span class="hover-flip-item-wrapper">
-                                                    <span class="hover-flip-item">
-                                                        <span data-text="@post.Creator?.FullName">@post.Creator?.FullName</span>
-                                                    </span>
-                                                </span>
-                                            </h6>
-                                            <ul class="post-meta-list">
-                                                <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
-                                                @if (post.Comments.Count > 1)
-                                                {
-                                                    <li><span>@post.Comments.Count</span> total comments on this post.</li>
-                                                }
-                                                else if (post.Comments.Count == 1)
-                                                {
-                                                    <li><span>@post.Comments.Count</span> comment on this post.</li>
-                                                }
-                                                else
-                                                {
-                                                    <li>No one has commented on this post yet.</li>
-                                                }
-                                            </ul>
-                                        </div>
+                                        }
+                                        <h6 class="post-author-name">
+                                            <span class="lighttText">@post.Creator?.FullName</span>
+                                        </h6>
+                                        <ul class="post-meta-list">
+                                            <li class="lightText">@post.DateCreated.ToString("MMM dd, yyyy")</li>
+                                            @if (post.Comments.Count > 1)
+                                            {
+                                                <li class="lightText"><span>@post.Comments.Count</span> total comments on this post.</li>
+                                            }
+                                            else if (post.Comments.Count == 1)
+                                            {
+                                                <li class="lightText"><span>@post.Comments.Count</span> comment on this post.</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="lightText">No one has commented on this post yet.</li>
+                                            }
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                        {
                             <div class="row align-items-center justify-content-center mx-1">
                                 <div class="col-12 text-center">
                                     <form asp-controller="BlogPosts" asp-action="Publish" method="post">
@@ -119,59 +118,11 @@
                                 <div class="col-12 text-center">
                                     <form asp-controller="BlogPosts" asp-action="Delete" method="post">
                                         <input type="hidden" asp-for="@post.Id" name="id" />
-                                            @{
-                                                string btnDelete = post.IsDeleted ? "Un-Delete" : "Delete";
-                                            }
-                                            <input type="submit" class="btn btn-warning rounded-pill deleteBtn" value="@btnDelete">
+                                        @{
+                                            string btnDelete = post.IsDeleted ? "Un-Delete" : "Delete";
+                                        }
+                                        <input type="submit" class="btn btn-warning rounded-pill deleteBtn" value="@btnDelete">
                                     </form>
-                                </div>
-                            </div>
-
-                        }
-                        else
-                        {
-                            <div class="post-content col-8 col-md-5">
-                                <div class="post-cat">
-                                    <div class="post-cat-list">
-                                        <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
-                                            <span class="hover-flip-item">
-                                                <span data-text="@post.Category!.Name">@post.Category.Name</span>
-                                            </span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <h4 class="title">
-                                    <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
-                                        @post.Title
-                                    </a>
-                                </h4>
-                                <div class="post-meta-wrapper">
-                                    <div class="post-meta">
-                                        <div class="content">
-                                            <h6 class="post-author-name">
-                                                <span class="hover-flip-item-wrapper">
-                                                    <span class="hover-flip-item">
-                                                        <span data-text="@post.">@post.Creator?.FullName</span>
-                                                    </span>
-                                                </span>
-                                            </h6>
-                                            <ul class="post-meta-list">
-                                                <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
-                                                @if (post.Comments.Count > 1)
-                                                {
-                                                    <li><span>@post.Comments.Count</span> total comments on this post.</li>
-                                                }
-                                                else if (post.Comments.Count == 1)
-                                                {
-                                                    <li><span>@post.Comments.Count</span> comment on this post.</li>
-                                                }
-                                                else
-                                                {
-                                                    <li>No one has commented on this post yet.</li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         }
@@ -182,6 +133,7 @@
                 @*<div class="b2">Page @(Model.PageCount < Model.PageNumber ? 1 : Model.PageNumber) of @Model.PageCount</div>
 
                 <div class="b2">@Html.PagedListPager(Model, pageNum => Url.Action("Index",new {pageNum}))</div>*@
+
             </div>
             <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
                 <partial name="_Sidebar" />

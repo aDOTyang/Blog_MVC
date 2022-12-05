@@ -11,12 +11,12 @@
 
 <h1></h1>
 <!-- Start Post List Wrapper  -->
-<div class="axil-post-list-area axil-section-gap bg-color-white">
+<div class="axil-post-list-area axil-section-gap">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title">
-                    <h2 class="title mb--40">Topics I've Written About</h2>
+                    <h2 class="title mb--40 lightText">Topics I've Written About</h2>
                 </div>
                 @if (User.Identity!.IsAuthenticated)
                 {
@@ -33,11 +33,11 @@
                     <!-- Start Post List  -->
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
-                            <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@category.BlogPosts">
+                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
                                 <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!, category.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                             </a>
                         </div>
-                        <div class="post-content">
+                        <div class="post-content border-warning col-8 col-md-5">
                             <div class="post-cat">
                                 <div class="post-cat-list">
                                     <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
@@ -47,32 +47,39 @@
                                     </a>
                                 </div>
                             </div>
-                            <h4 class="title">
+                            <h4 class="title lightText">
                                 <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
                                     @category.Name
                                 </a>
                             </h4>
-                            <div class="post-meta-wrapper">
+                            <div class="post-meta-wrapper row">
                                 <div class="post-meta">
-                                    <div class="content">
-                                        <ul class="post-meta-list">
+                                    <div class="content row row-cols-2 justify-content-around align-items-end">
+                                        <ul class="post-meta-list col-9">
                                             @if (category.BlogPosts.Count > 1)
                                             {
-                                                <li><span>@category.BlogPosts.Count</span> total posts on this topic.</li>
+                                                <li class="lightText"><span>@category.BlogPosts.Count</span> total posts on this topic.</li>
                                             }
                                             else if (category.BlogPosts.Count == 1)
                                             {
-                                                <li><span>@category.BlogPosts.Count</span> post on this topic.</li>
+                                                <li class="lightText"><span>@category.BlogPosts.Count</span> post on this topic.</li>
                                             }
                                             else
                                             {
-                                                <li>No one has written about this topic yet.</li>
+                                                <li class="lightText">No one has written about this topic yet.</li>
                                             }
                                         </ul>
+                                <div class="col-3">
+                                @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                                {
+                                    <a asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-info rounded-pill editBtns">Edit</a>
+                                }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <!-- End Post List  -->
                 }

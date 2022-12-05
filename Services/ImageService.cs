@@ -5,7 +5,7 @@ namespace Blog_MVC.Services
     public class ImageService : IImageService
     {
         private readonly string _defaultBlogPostImageSrc = "/img/DefaultWritingPic.png";
-        private readonly string _defaultCategoryImageSrc = "/img/DefaultBlog.png";
+        private readonly string _defaultCategoryImageSrc = "/img/DefaultBlog2.png";
         private readonly string _defaultUserImageSrc = "/img/DefaultContactImage.png";
 
         public string ConvertByteArrayToFile(byte[] fileData, string extension, int defaultImage)

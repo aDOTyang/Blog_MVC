@@ -1,5 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
+    @using Blog_MVC.Services.Interfaces
+    @inject IBlogPostService _blogPostService
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,39 +21,23 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Blog_MVC.styles.css" asp-append-version="true" />
+   
 </head>
+
+@{
+    var categories = (await _blogPostService.GetCategoriesAsync()).OrderByDescending(b => b.Name);
+}
 
 <body>
     <div class="main-wrapper">
-        @* cursor highlighter *@
-        @*<div class="mouse-cursor cursor-outer"></div>
-        <div class="mouse-cursor cursor-inner"></div>*@
-
-        @* light/dark mode switcher *@
-        @*<div id="my_switcher" class="my_switcher">
-            <ul>
-                <li>
-                    <a href="javascript: void(0);" data-theme="light" class="setColor light switcher">
-                        <span title="Light Mode">Light</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" data-theme="dark" class="setColor dark switcher">
-                        <span title="Dark Mode">Dark</span>
-                    </a>
-                </li>
-            </ul>
-        </div>*@
-
         <!-- Start Header -->
-        <header class="header axil-header header-light header-sticky header-with-shadow">
+        <header class="header header-sticky header-with-shadow">
             <div class="header-wrap">
-                <div class="row justify-content-between align-items-center">
+                <div class="row justify-content-between align-items-center mx-3">
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-3 col-12">
-                        <div class="logo">
+                        <div class="logo-5">
                             <a asp-action="Index" asp-controller="Home">
-                                <img class="light-logo" src="~/img/ALEXdark_100x50.png" alt="Alex Yang logo">
-                                <img class="dark-logo" src="~/img/ALEXlight.png" alt="Alex Yang logo">
+                                <img src="~/img/ALEXdark_100x50.png" alt="Alex Yang logo">
                             </a>
                         </div>
                     </div>
@@ -60,8 +48,25 @@
                                 <ul class="mainmenu">
                                     <li><a asp-action="Index" asp-controller="Home">Home</a></li>
                                     <li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
-                                    <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
-                                    <li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+                                    <li class="menu-item-has-children">
+                                        <a asp-controller="Categories" asp-action="Index">Categories</a>
+                                        <ul class="axil-submenu">
+                                            @foreach (Category category in categories)
+                                            {
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@category.Name">@category.Name</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                                    {
+                                        <li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+                                    }
                                     <li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
                                     <li><a asp-controller="Home" asp-action="ContactMe">Contact Me</a></li>
                                 </ul>
@@ -124,7 +129,7 @@
 
 
         <!-- Start Footer Area  -->
-        <div class="axil-footer-area axil-footer-style-1 bg-color-white">
+        <div class="axil-footer-area axil-footer-style-1">
             <!-- Start Copyright Area  -->
             <div class="copyright-area">
                 <div class="container-fluid">
@@ -133,10 +138,7 @@
                             <span class="b2">Site built by Alex Yang</span>
                         </div>
                         <div class="inner col-md-4 col-12 text-center flex-wrap order-0 order-md-0 logo">
-                            <picture>
-                                <source srcset="~/img/AYdark_250x100.png" class="footerLogo" media="(prefers-color-scheme: light)" alt="Alex Yang Logo white lettering black background" />
-                                <img src="~/img/AYlight_100x50.png" class="footerLogo" alt="Alex Yang Logo black lettering on white background" />
-                            </picture>
+                                <img srcset="~/img/AYdark_250x100.png" class="footerLogo" media="(prefers-color-scheme: light)" alt="Alex Yang Logo white lettering black background" />
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="copyright-right text-center text-md-end order-md-last order-2 mt-3 mt-md-0">
@@ -171,7 +173,6 @@
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
-
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

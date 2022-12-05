@@ -4,32 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (User.Identity!.IsAuthenticated)
+{
+    <a class="mt-5 ms-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="Tags">
+        <span class="hover-flip-item">
+            <span data-text="Add A New Tag">Add A New Tag</span>
+        </span>
+    </a>
 }
-    </tbody>
-</table>
+
+<div class="content-block post-list-view">
+    <div class="post-content row">
+        <u class="col-12 mb-3 ms-5">Tag Name:</u>
+        @foreach (Tag tag in Model)
+        {
+            <div class="col-3 mb-3 ms-5">@tag.Name</div>
+            <a asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-warning rounded-pill col-2 mb-3 me-1">Edit</a>
+            <a asp-action="Details" asp-route-id="@tag.Id" class="btn btn-primary rounded-pill col-2 mb-3 mx-1">Details</a>
+            <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-danger rounded-pill col-2 mb-3 ms-1">Delete</a>
+        }
+    </div>
+</div>
