@@ -14,16 +14,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title">
-                    <h2 class="title mb--40">Recent Comments</h2>
+                    <h2 class="title mb--40 lightText">Recent Comments</h2>
                 </div>
-                @* @if (User.Identity!.IsAuthenticated)
-                {
-                <a class="mb-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="BlogPosts">
-                <span class="hover-flip-item">
-                <span class="b1" data-text="Write Something New">Write Something New</span>
-                </span>
-                </a>
-                }*@
             </div>
             <div class="col-md-8">
                 @foreach (Comment comment in Model)
@@ -35,42 +27,40 @@
                                 <img src="@_ImageService.ConvertByteArrayToFile(comment.BlogPost!.ImageData!, comment.BlogPost!.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                             </a>
                         </div>
-                        <div class="post-content">
+                        <div class="post-content border-warning">
                             <div class="post-cat">
                                 <div class="post-cat-list">
                                     <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="Details" asp-route-id="@comment.BlogPost!.Slug">
                                         <span class="hover-flip-item">
-                                            <span data-text="@comment.BlogPost!.CategoryId">@comment.BlogPost!.Category</span>
+                                            <span data-text="@comment.BlogPost!.Category.Name">@comment.BlogPost!.Category.Name</span>
                                         </span>
                                     </a>
                                 </div>
                             </div>
                             <h4 class="title">
-                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@comment.BlogPost.Slug">
+                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@comment.BlogPost.Slug" class="lightText">
                                     @comment.BlogPost.Title
                                 </a>
                             </h4>
                             <div class="post-meta-wrapper">
                                 <div class="post-meta">
                                     <div class="content">
-                                        <h6 class="post-author-name">
-                                            <span class="mb-2">Post By: @comment.Author!.FullName</span> <br>
+                                        <h6 class="post-author-name mb-3">
+                                            <span class="lightText">Post By: @comment.Author!.FullName | </span>
+                                            <span class="lightText">Blog Post written on @comment.BlogPost.DateCreated.ToString("MMM dd, yyyy")</span>
                                         </h6>
-                                        <ul class="">
-                                            <li class="b3">Blog Post written on @comment.BlogPost.DateCreated.ToString("MMM dd, yyyy")</li>
-                                        </ul>
-                                        <h6 class="post-author-name">
+                                        <h6 class="post-author-name lightText">
                                             <span data-text="Comment By: @comment.Author.FullName">Comment By: @comment.Author.FullName</span>
                                         </h6>
                                         <ul>
-                                            <li class="b3">Comment posted on @comment.DateCreated.ToString("MMM dd, yyyy")<br /></li>
+                                            <li class="b3 lightText">Comment posted on @comment.DateCreated.ToString("MMM dd, yyyy")<br /></li>
                                             @if (comment.BlogPost.Comments.Count > 1)
                                             {
-                                                <li class="b3"><span>@comment.BlogPost.Comments.Count</span> total comments on this post.</li>
+                                                <li class="b3 lightText"><span>@comment.BlogPost.Comments.Count</span> total comments on this post.</li>
                                             }
                                             else if (comment.BlogPost.Comments.Count == 1)
                                             {
-                                                <li class="b3"><span>@comment.BlogPost.Comments.Count</span> comment on this post.</li>
+                                                <li class="b3 lightText"><span>@comment.BlogPost.Comments.Count</span> comment on this post.</li>
                                             }
                                         </ul>
                                     </div>

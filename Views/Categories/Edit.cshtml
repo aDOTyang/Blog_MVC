@@ -7,8 +7,6 @@
     ViewData["Title"] = "Edit";
 }
 
-<h3>Edit</h3>
-
 <div class="post-single-wrapper axil-section-gap">
     <div class="container mt-5 col-md-6">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -29,8 +27,8 @@
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group text-center">
-                    <label asp-for="CategoryImage" class="control-label"></label>
-                    <img id="categoryImage" class="img-fluid border rounded-3 m-2" src="@_ImageService.ConvertByteArrayToFile(Model.ImageData!, Model.ImageType!,(int)DefaultImage.CategoryImage)" />
+                    <label asp-for="CategoryImage" class="control-label"></label><br />
+                    <img id="categoryImage" class="img-fluid border rounded-3 m-2" style="max-height:300px" src="@_ImageService.ConvertByteArrayToFile(Model.ImageData!, Model.ImageType!,(int)DefaultImage.CategoryImage)" />
                     <input asp-for="CategoryImage" class="form-control mt-3" accept=".png,.jpg,.jpeg,.gif,.svg"
                            onchange="document.getElementById('categoryImage').src= window.URL.createObjectURL(this.files[0])" />
                 </div>

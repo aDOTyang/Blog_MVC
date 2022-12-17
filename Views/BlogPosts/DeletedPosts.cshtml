@@ -14,7 +14,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title">
-                    <h2 class="title mb--40">Things I wrote</h2>
+                    <h2 class="title mb--40 lightText">Things I wrote</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="mb-3 hover-flip-item-wrapper" asp-action="Index" asp-controller="BlogPosts">
+                        <span class="hover-flip-item">
+                            <span class="b1 ms-2" data-text="View Active Posts">View Active Posts</span>
+                        </span>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-8 col-xl-8">
@@ -27,7 +36,7 @@
                                 <img src="@_ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!,(int)DefaultImage.BlogPostImage)" alt="Blog Post Images">
                             </a>
                         </div>
-                        <div class="post-content col-8 col-md-5">
+                        <div class="post-content border-warning col-8 col-md-5">
                             <div class="post-cat">
                                 <div class="post-cat-list">
                                     <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Details" asp-route-id="@post.CategoryId">
@@ -38,7 +47,7 @@
                                 </div>
                             </div>
                             <h4 class="title">
-                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug">
+                                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@post.Slug" class="lightText">
                                     @post.Title
                                 </a>
                             </h4>
@@ -53,18 +62,18 @@
                                             </span>
                                         </h6>
                                         <ul class="post-meta-list">
-                                            <li>@post.DateCreated.ToString("MMM dd, yyyy")</li>
+                                            <li class="lightText">@post.DateCreated.ToString("MMM dd, yyyy")</li>
                                             @if (post.Comments.Count > 1)
                                             {
-                                                <li><span>@post.Comments.Count</span> total comments on this post.</li>
+                                                <li class="lightText"><span>@post.Comments.Count</span> total comments on this post.</li>
                                             }
                                             else if (post.Comments.Count == 1)
                                             {
-                                                <li><span>@post.Comments.Count</span> comment on this post.</li>
+                                                <li class="lightText"><span>@post.Comments.Count</span> comment on this post.</li>
                                             }
                                             else
                                             {
-                                                <li>No one has commented on this post yet.</li>
+                                                <li class="lightText">No one has commented on this post.</li>
                                             }
                                         </ul>
                                     </div>

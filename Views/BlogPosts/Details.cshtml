@@ -63,123 +63,103 @@
                     </div>
                 </div>
                 <!-- End Banner Area -->
-
-                    <!-- Start Author  -->
-                    <div class="about-author">
-                        <div class="media">
-                            <div class="thumbnail">
-                                <a href="#">
-                                    <img src="~/img/profpic_200.png" alt="Blog Post Author Image">
-                                </a>
+                <!-- Start Author  -->
+                <div class="about-author">
+                    <div class="media">
+                        <div class="thumbnail me-3">
+                            <img src="~/img/profpic_200.png" alt="Blog Post Author Image" class="img-100 rounded-circle">
+                        </div>
+                        <div class="media-body">
+                            <div class="author-info">
+                                <h5 class="title">
+                                    <span class="b1 lightText">@Model.Creator?.FullName</span>
+                                </h5>
+                                <span class="b3 subtitle lightText">Fullstack Web Developer</span>
                             </div>
-                            <div class="media-body">
-                                <div class="author-info">
-                                    <h5 class="title">
-                                        <a class="hover-flip-item-wrapper">
-                                            <span class="hover-flip-item">
-                                                <span class="b1" data-text="@Model.Creator?.FullName">@Model.Creator?.FullName</span>
-                                            </span>
-                                        </a>
-                                    </h5>
-                                    <span class="b3 subtitle">Fullstack Web Developer</span>
-                                </div>
-                                <div class="content">
-                                    <p class="b2">About Me:</p>
-                                    <span class="b1 description">
-                                        I'm creating awesome websites with powerful & flexible functionalities
-                                        and beautiful front ends! I used C# in ASP.Net 6.0 plus Bootstrap & Javascript to make this blog!
-                                        Check out my portfolio to see what else I've made and what I'm able to bring to your team!
-                                    </span>
-                                    <ul class="social-share-transparent size-md">
-                                        <li><a href="https://www.github.com/aDOTyang"><i class="fab fa-github"></i></a></li>
-                                        <li><a href="https://www.linkedin.com/in/alexyanglinked"><i class="fab fa-linkedin"></i></a></li>
-                                        <li><a href="mailto:ayangdevv@gmail.com"><i class="far fa-envelope"></i></a></li>
-                                        <li><a href="https://alexyang.netlify.app/"><i class="bi bi-journal-album"></i></a></li>
-                                    </ul>
-                                </div>
+                            <div class="content">
+                                <p class="b2">About Me:</p>
+                                <span class="b1 description">
+                                    I'm creating awesome websites with powerful & flexible functionalities
+                                    and beautiful front ends! I used C# in ASP.Net 6.0 plus Bootstrap & Javascript to make this blog!
+                                    Check out my portfolio to see what else I've made and what I'm able to bring to your team!
+                                </span>
+                                <ul class="social-share-transparent size-md">
+                                    <li><a href="https://www.github.com/aDOTyang"><i class="fab fa-github"></i></a></li>
+                                    <li><a href="https://www.linkedin.com/in/alexyanglinked"><i class="fab fa-linkedin"></i></a></li>
+                                    <li><a href="mailto:ayangdevv@gmail.com"><i class="far fa-envelope"></i></a></li>
+                                    <li><a href="https://alexyang.netlify.app/"><i class="bi bi-journal-album"></i></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                    <!-- End Author  -->
-                    <!-- Start Comment Form Area  -->
-                    <div class="axil-comment-area mt-3">
+                </div>
+                <!-- End Author  -->
+                <!-- Start Comment Form Area  -->
+                <div class="axil-comment-area mt-3">
 
-                        @if (User.Identity!.IsAuthenticated)
-                        {
-                            <!-- Start custom Add Comment  -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form asp-action="Create" asp-controller="Comments" method="post">
-                                        @* asp-for tells the form what value to look for (where Id is 'Id' in BlogPost class),
-                                    name then tells it what to call it in when Posting -> Id turns into BlogPostId so it can be used by CommentsController *@
-                                        <input type="hidden" asp-for="Id" name="BlogPostId" />
-                                        <input type="hidden" asp-for="Slug">
-                                        <div class="form-group">
-                                            <label class="control-label">Add a Comment</label>
-                                            <textarea name="Body" class="form-control editor"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" value="Create" class="btn btn-primary my-3" />
-                                        </div>
-                                    </form>
-                                </div>
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <!-- Start custom Add Comment  -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form asp-action="Create" asp-controller="Comments" method="post">
+                                    @* asp-for tells the form what value to look for (where Id is 'Id' in BlogPost class),
+                                name then tells it what to call it in when Posting -> Id turns into BlogPostId so it can be used by CommentsController *@
+                                    <input type="hidden" asp-for="Id" name="BlogPostId" />
+                                    <input type="hidden" asp-for="Slug">
+                                    <div class="form-group text-dark">
+                                        <label class="control-label">Add a Comment</label>
+                                        <textarea name="Body" class="form-control editor"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Create" class="btn btn-primary my-3" />
+                                    </div>
+                                </form>
                             </div>
-                            <!-- End custom Add Comment -->
-                        }
+                        </div>
+                        <!-- End custom Add Comment -->
+                    }
 
-                        <!-- Start Comment Area  -->
-                        <div class="axil-comment-area">
-                            <h4 class="title">2 comments</h4>
-                            <ul class="comment-list">
-                                <!-- Start Single Comment  -->
-                                @foreach (Comment comment in Model.Comments)
-                                {
-                                    <li class="comment">
-                                        <div class="comment-body row">
-                                            <div class="single-comment col-md-12">
-                                                <div class="col-md-4 comment-img-container">
-                                                    <img src="@_ImageService.ConvertByteArrayToFile(comment.Author?.ImageData!, comment.Author?.ImageType!, (int)DefaultImage.BlogUserImage)" alt="Comment Author Image" class="comment-img">
+                    <!-- Start Comment Area  -->
+                    <div class="axil-comment-area">
+                        <h4 class="title lightText"><span>@Model.Comments.Count()</span> comments on this post.</h4>
+                        <ul class="comment-list">
+                            <!-- Start Single Comment  -->
+                            @foreach (Comment comment in Model.Comments)
+                            {
+                                <li class="comment">
+                                    <div class="row">
+                                        <div class="single-comment col-md-12">
+                                            <div class="media me-3">
+                                                <img src="@_ImageService.ConvertByteArrayToFile(comment.Author?.ImageData!, comment.Author?.ImageType!, (int)DefaultImage.BlogUserImage)" alt="Comment Author Image" class="h-75 rounded-circle">
+                                            </div>
+                                            <div class="comment-inner col-8">
+                                                <h6 class="commenter lightText">
+                                                    <span data-text="@comment.Author?.FullName">@comment.Author?.FullName</span>
+                                                </h6>
+                                                <div class="comment-meta">
+                                                    <div class="time-spent">@comment.DateCreated.ToLocalTime().ToString("MM/dd/yy, hh:mm tt")</div>
                                                 </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                                <span data-text="@comment.Author?.FullName">@comment.Author?.FullName</span>
-                                                            </span>
-                                                        </a>
-                                                    </h6>
-                                                    <div class="comment-meta">
-                                                        <div class="time-spent">@comment.DateCreated.ToLocalTime().ToString("MM/dd/yy, hh:mm tt")</div>
-                                                        <div class="reply-edit">
-                                                            <div class="reply">
-                                                                <a class="comment-reply-link hover-flip-item-wrapper" href="#">
-                                                                    <span class="hover-flip-item">
-                                                                        <span data-text="Reply">Reply</span>
-                                                                    </span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="comment-text">
-                                                        <p class="b2">
-                                                            <div class="col-10">@Html.Raw(comment.Body)</div>
-                                                        </p>
-                                                    </div>
+                                                <div class="lightText">
+                                                    <p class="b2 lightText">
+                                                        <div class="col-10 lightText">@Html.Raw(comment.Body)</div>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
-                                }
-                                <!-- End Single Comment  -->
-                            </ul>
-                            <div>
-                                @if (User.IsInRole("Administrator"))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary rounded-pill mt-3 me-3">Edit</a> <span></span>
-                                    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-primary rounded-pill mt-3 me-3">Delete</a>
-                                }
-                                <a asp-action="Index" asp-controller="BlogPosts" class="btn btn-primary rounded-pill mt-3">Back to List</a>
-                            </div>
+                                    </div>
+                                </li>
+                            }
+                            <!-- End Single Comment  -->
+                        </ul>
+                        <div>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary rounded-pill mt-3 me-3">Edit</a> <span></span>
+                                <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-primary rounded-pill mt-3 me-3">Delete</a>
+                            }
+                            <a asp-action="Index" asp-controller="BlogPosts" class="btn btn-primary rounded-pill mt-3">Back to List</a>
+                        </div>
                         <!-- End Comment Area  -->
 
                     </div>
@@ -205,7 +185,7 @@
             });
     </script>
 
-@*    <script>
+    @*    <script>
         function filterTags(ele) {
             let input = document.getElementById('currentPostTags');
             if (ele.classList.contains('hideTag')) {
@@ -213,4 +193,4 @@
             }
         }
     </script>*@
-}
+    }

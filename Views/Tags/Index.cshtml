@@ -5,24 +5,48 @@
 }
 
 
-@if (User.Identity!.IsAuthenticated)
-{
-    <a class="mt-5 ms-5 hover-flip-item-wrapper" asp-action="Create" asp-controller="Tags">
-        <span class="hover-flip-item">
-            <span data-text="Add A New Tag">Add A New Tag</span>
-        </span>
-    </a>
-}
 
-<div class="content-block post-list-view">
-    <div class="post-content row">
-        <u class="col-12 mb-3 ms-5">Tag Name:</u>
-        @foreach (Tag tag in Model)
+
+<div class="content-block post-list-view card bg-dark">
+    <div class="post-content row card-body border-warning border-2 bg-light text-dark m-5 p-5">
+        @if (User.Identity!.IsAuthenticated)
         {
-            <div class="col-3 mb-3 ms-5">@tag.Name</div>
-            <a asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-warning rounded-pill col-2 mb-3 me-1">Edit</a>
-            <a asp-action="Details" asp-route-id="@tag.Id" class="btn btn-primary rounded-pill col-2 mb-3 mx-1">Details</a>
-            <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-danger rounded-pill col-2 mb-3 ms-1">Delete</a>
+            <a class="hover-flip-item-wrapper mb-3" asp-action="Create" asp-controller="Tags">
+                <span class="hover-flip-item">
+                    <span data-text="Add A New Tag">Add A New Tag</span>
+                </span>
+            </a>
         }
+        <table class="text-dark display" id="tagTable">
+            <thead>
+                <tr>
+                    <th class="ms-5">Tag Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (Tag tag in Model)
+            {
+                <tbody>
+                    <tr class="">
+                <td><div class="col-3 mb-3 ms-5">@tag.Name</div></td>
+                <td class="text-center align-self-center">
+                    <a asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-warning rounded-pill col-2 mb-3 me-1">Edit</a>
+                    <a asp-action="Details" asp-route-id="@tag.Id" class="btn btn-primary rounded-pill col-2 mb-3 mx-1">Details</a>
+                    <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-danger rounded-pill col-2 mb-3 ms-1">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
     </div>
 </div>
+
+@section Scripts{
+    @{
+    <script>
+                $(document).ready(function () {
+                    $('#tagTable').DataTable();
+                });
+    </script>
+    }
+    }

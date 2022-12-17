@@ -1,32 +1,33 @@
 ﻿@model Blog_MVC.Models.EmailData
 @using Blog_MVC.Services
 
-
-<div class="card">
-    <form asp-action="ContactMe" asp-controller="Home" method="post">
-        @*<input type="hidden" asp-for="@Model.EmailAddress" />*@
-        <div class="card-header">
-            <h3 class="mt-2 ms-5 text-dark">Sent From: @Model.EmailAddress</h3>
-        </div>
-        <div class="card-body mx-5">
-            <div class="row row-cols-1 text-dark">
-                <div class="col">
-                    <label asp-for="@Model.EmailAddress" class="form-label">To: </label>
-                    <textarea typeof="email" readonly class="form-control" asp-for="@Model.EmailAddress"></textarea>
+<div class="row justify-content-center my-5 py-5">
+    <div class="card col-10 border-warning border-2 m-2 p-2">
+        <form asp-action="ContactMe" asp-controller="Home" method="post">
+            @*<input type="hidden" asp-for="@Model.EmailAddress" />*@
+            <div class="card-header">
+                <h3 class="mt-2 ms-5 text-dark">Sent From: @Model.EmailAddress</h3>
+            </div>
+            <div class="card-body mx-5">
+                <div class="row row-cols-1 text-dark">
+                    <div class="col">
+                        <label asp-for="@Model.EmailAddress" class="form-label">To: </label>
+                        <textarea typeof="email" readonly class="form-control" asp-for="@Model.EmailAddress"></textarea>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Subject" class="form-label mt-2">Subject: </label>
+                        <input type="text" class="form-control" asp-for="Subject">
+                    </div>
+                    <div class="col">
+                        <label asp-for="Message" for="contact-message" class="form-label mt-2">Message:</label>
+                        <textarea typeof="email" class="form-control" asp-for="Message" rows="5"></textarea>
+                    </div>
                 </div>
-                <div class="col">
-                    <label asp-for="Subject" class="form-label mt-2">Subject: </label>
-                    <input type="text" class="form-control" asp-for="Subject">
-                </div>
-                <div class="col">
-                    <label asp-for="Message" for="contact-message" class="form-label mt-2">Message:</label>
-                    <textarea typeof="email" class="form-control" asp-for="Message" rows="5"></textarea>
+                <div class="card-footer d-flex justify-content-between p-3">
+                    <button type="submit" class="axil-button btn btn-primary rounded-pill">Send!</button>
+                    <a asp-action="Index" asp-controller="Home" class="axil-button btn btn-primary rounded-pill" type="submit">Nevermind</a>
                 </div>
             </div>
-            <div class="card-footer d-flex justify-content-between p-3">
-                <button type="submit" class="axil-button btn btn-primary rounded-pill">Send!</button>
-                <a asp-action="Index" asp-controller="Home" class="axil-button btn btn-primary rounded-pill" type="submit">Nevermind</a>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

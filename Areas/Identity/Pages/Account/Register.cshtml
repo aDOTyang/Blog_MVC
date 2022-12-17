@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-7 ms-5 mt-3">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Register a new account.</h2>
+            <h2 class="lightText">Register a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating mb-3">
@@ -41,7 +41,7 @@
     </div>
     <div class="col-md-4 mt-4">
         <section>
-            <h3>Register using a third party service</h3>
+            <h3 class="lightText">Register using a third party service</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)

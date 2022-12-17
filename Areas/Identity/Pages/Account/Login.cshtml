@@ -10,7 +10,7 @@
     <div class="col-md-7 ms-5 mt-3">
         <section>
             <form id="account" method="post" class="text-dark">
-                <h2>Log in with a registered account</h2>
+                <h2 class="lightText">Log in with a registered account</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mb-3">
@@ -38,13 +38,13 @@
                 </div>
                 <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="lightText">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="lightText">Register as a new user</a>
                     </p>
                     <p class="mb-3">
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="lightText">Resend email confirmation</a>
                     </p>
                 </div>
             </form>
@@ -52,7 +52,7 @@
     </div>
     <div class="col-md-4 mt-4">
         <section>
-            <h3>Log in with a third-party service</h3>
+            <h3 class="lightText">Log in with a third-party service</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)

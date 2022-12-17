@@ -4,22 +4,23 @@
     ViewData["Title"] = "Edit";
 }
 
-<h4 class="ms-5 mt-5">Edit This Tag Name</h4>
-<hr />
-<div class="row ms-5">
-    <div class="col-md-4">
+<div class="post-single-wrapper axil-section-gap m-5 p-5">
+    <div class="container mt-5 col-md-6">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control bg-light text-dark" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <div class="col-6 text-start"><input type="submit" value="Save" class="btn btn-primary btn-lg rounded-pill" /></div>
-                <div class="col-6 text-end">
-                    <a asp-action="Index" class="btn btn-primary rounded-pill">Back to List</a>
+            <h4 class="lightText">Edit This Tag Name</h4>
+            <div classclass="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control bg-light text-dark" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group row justify-content-between">
+                    <div class="col-3"><input type="submit" value="Save" class="btn btn-primary rounded-pill" /></div>
+                    <div class="col-3 text-end">
+                        <a asp-action="Index" class="btn btn-primary rounded-pill">Back to Tags</a>
+                    </div>
                 </div>
             </div>
         </form>

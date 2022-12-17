@@ -10,7 +10,7 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h3 class="lightText">@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row ms-5">
     <div class="col-md-6">
@@ -44,7 +44,7 @@
                     <span asp-validation-for="Input.BlogUserImage" class=text-danger></span>
                 </div>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill mb-5">Save</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary mb-5">Save</button>
         </form>
     </div>
 </div>
