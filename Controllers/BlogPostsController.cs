@@ -40,7 +40,7 @@ namespace Blog_MVC.Controllers
 
             if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
             {
-                var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == false).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);
+                var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == false).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags).Include(c=>c.Creator).ThenInclude(c=>c.FullName);
                 return View(await applicationDbContext.ToListAsync());
             } else {
                 var applicationDbContext = _context.BlogPosts.Where(b => b.IsDeleted == false && b.IsPublished == true).Include(b => b.Category).Include(c => c.Comments).Include(t => t.Tags);

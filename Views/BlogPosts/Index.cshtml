@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<Blog_MVC.Models.BlogPost>
 @using Blog_MVC.Enums
 @using Blog_MVC.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @inject IImageService _ImageService
+@inject UserManager<BlogUser> _userManager
 
 @{
 }
@@ -78,8 +80,8 @@
                                                 }
                                             </h6>
                                         }
-                                        <h6 class="post-author-name">
-                                            <span class="lighttText">@post.Creator?.FullName</span>
+                                        <h6 class="post-author-name lightText">
+                                            <span class="">@((_userManager.FindByIdAsync(post.CreatorId)).Result.FullName)</span>
                                         </h6>
                                         <ul class="post-meta-list">
                                             <li class="lightText">@post.DateCreated.ToString("MMM dd, yyyy")</li>
