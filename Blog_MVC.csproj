@@ -7,6 +7,7 @@
     <UserSecretsId>aspnet-Blog_MVC-557370A6-35AB-4C26-8BE7-9A4E627EF837</UserSecretsId>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<InvariantGlobalization>true</InvariantGlobalization>
+	  <EnvironmentName>Production</EnvironmentName>
   </PropertyGroup>
 
   <ItemGroup>

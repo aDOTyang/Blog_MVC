@@ -75,8 +75,8 @@ await DataUtility.ManageDataAsync(scope.ServiceProvider);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
-    //app.UseExceptionHandler("/Home/Error");
+    //app.UseMigrationsEndPoint();
+    app.UseExceptionHandler("/Home/Error");
 }
 else
 {
