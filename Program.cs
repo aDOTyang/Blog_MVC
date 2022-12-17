@@ -27,7 +27,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<IEmailSender, EmailService>();
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 // API google auth
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
@@ -76,6 +76,7 @@ await DataUtility.ManageDataAsync(scope.ServiceProvider);
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    //app.UseExceptionHandler("/Home/Error");
 }
 else
 {
