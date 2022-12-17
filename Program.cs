@@ -27,7 +27,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<IEmailSender, EmailService>();
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 // API google auth
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
