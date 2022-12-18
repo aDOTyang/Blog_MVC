@@ -654,7 +654,6 @@ p {
   font-size: var(--font-size-b1);
   line-height: var(--line-height-b1);
   font-weight: var(--p-regular);
-  /*color: var(--color-body);*/
   margin: 0 0 40px;
 }
 @media only screen and (max-width: 767px) {
@@ -761,7 +760,6 @@ ul {
 ul.liststyle.bullet li {
   font-size: 18px;
   line-height: 30px;
-  color: var(--color-body);
   position: relative;
   padding-left: 30px;
 }
@@ -776,7 +774,6 @@ ul.liststyle.bullet li::before {
   width: 6px;
   height: 6px;
   border-radius: 100%;
-  background: var(--color-body);
   left: 0;
   top: 10px;
 }
@@ -788,7 +785,6 @@ ul li {
   line-height: var(--line-height-b1);
   margin-top: 10px;
   margin-bottom: 10px;
-  color: var(--color-body);
 }
 ul li a {
   text-decoration: none;
@@ -807,7 +803,6 @@ ol {
 ol li {
   font-size: var(--font-size-b1);
   line-height: var(--line-height-b1);
-  color: var(--color-body);
   margin-top: 10px;
   margin-bottom: 10px;
 }
