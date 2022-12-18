@@ -148,7 +148,6 @@ audio:not([controls]) {
 }
 
 a {
-  color: var(--color-heading);
   text-decoration: none;
   outline: none;
 }
@@ -531,7 +530,6 @@ h6,
   word-break: break-word;
   font-family: var(--secondary-font);
   line-height: 1.4074;
-  color: var(--color-heading);
 }
 
 h1,
@@ -10331,7 +10329,6 @@ figure img {
 }
 figure figcaption {
   margin-top: 20px;
-  color: var(--color-heading);
   font-size: var(--font-size-b4);
   line-height: var(--line-height-b4);
 }
@@ -10473,7 +10470,6 @@ blockquote p {
   margin-bottom: 0;
 }
 .about-author .media-body .author-info .title a .hover-flip-item span::before {
-  color: var(--color-heading);
 }
 .about-author .media-body .author-info .title a .hover-flip-item span::after {
   color: var(--color-primary);
