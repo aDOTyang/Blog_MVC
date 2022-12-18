@@ -64,23 +64,18 @@
                 </div>
             </div>
             <div class="form-group d-flex justify-content-end mt-3">
+                <a asp-action="Index" class="btn btn-primary rounded-pill align-self-center">Back to List</a>
                 <div class="form-group form-check d-flex my-auto">
                     <label class="form-check-label my-auto me-4">
                         <input class="form-check-input me-3" asp-for="IsPublished" />&nbsp; Publish?
                     </label>
                 </div>
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" /> <br />
+                
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-        </div>
-    </div>
 
 
 
@@ -94,5 +89,62 @@
             .catch(error => {
                 console.error(error);
             });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            jQuery.expr[':'].contains = function (a, i, m) {
+                return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+            };
+
+            $('#tagInput').focus(function () {
+                $('.tagcloud').show(300);
+            });
+
+            $('form *:not("#tagInput")').focus(function () {
+                if ($('.tagcloud').is(':visible')) {
+                    $('.tagcloud').hide(300);
+                }
+            });
+
+            $('#tagInput').keyup(function () {
+                $('.disabledTag').each(function () {
+                    $(this).removeClass('disabledTag');
+                });
+
+                let inputTags = $(this).val().split(',');
+                let searchString = inputTags.pop().trim();
+
+                $('.tagcloud > a:not(:contains(' + searchString + '))').hide();
+                $('.tagcloud > a:contains(' + searchString + ')').show();
+
+                inputTags.forEach(tag => {
+                    if (tag.trim() == '') return;
+                    let containingTag = $('.tagCloud > a:contains(' + tag.trim() + ')')
+                    if (containingTag.text().trim().toLowerCase() == tag.trim().toLowerCase())
+                        containingTag.addClass('disabledTag');
+                });
+            });
+        });
+
+        function addTag(ele) {
+            let input = document.getElementById('tagInput');
+            if (ele.classList.contains('disabledTag')) {
+                input.focus();
+                return;
+            };
+
+            let tagName = ele.textContent + ', ';
+            let currentTags = input.value.split(',');
+
+            currentTags.pop();
+
+            currentTags.push(tagName);
+            input.value = currentTags.reduce((inputString, currentString) => inputString + ", " + currentString.trim());
+            input.focus();
+
+            $('.tagcloud > a').show();
+            ele.classList.add('disabledTag');
+        };
     </script>
     }
