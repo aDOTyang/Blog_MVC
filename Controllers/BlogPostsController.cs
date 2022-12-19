@@ -94,7 +94,7 @@ namespace Blog_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string stringTags)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string? stringTags)
         {
 
             ModelState.Remove("CreatorId");
@@ -123,8 +123,11 @@ namespace Blog_MVC.Controllers
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
 
-                // add list of selected tags
-                await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
+                if (stringTags != null)
+                {
+                    // add list of selected tags
+                    await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
